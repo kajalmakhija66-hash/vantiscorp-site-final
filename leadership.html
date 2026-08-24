@@ -1,0 +1,2304 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Leadership — VantisCorp</title>
+<link rel="icon" href="assets/favicon.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=Inter:wght@400;500;600&family=IBM+Plex+Mono:wght@500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --accent: #17CC90;
+    --accent-dark: #10a374;
+    --ink: #0E1420;
+    --ink-soft: #4B5565;
+    --line: #E6E9ED;
+    --bg: #FFFFFF;
+    --bg-subtle: #F7F9FA;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    font-family: 'Inter', sans-serif;
+    color: var(--ink);
+    background: var(--bg);
+    -webkit-font-smoothing: antialiased;
+    overflow-x: hidden;
+  }
+
+  h1, h2, h3 {
+    font-family: 'Space Grotesk', sans-serif;
+    color: var(--ink);
+    line-height: 1.15;
+  }
+
+  a { text-decoration: none; color: inherit; }
+
+  .wrap {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 32px;
+  }
+
+  /* ---------- Header ---------- */
+  header {
+    position: sticky;
+    top: 0;
+    z-index: 50;
+    background: rgba(255,255,255,0.85);
+    backdrop-filter: saturate(180%) blur(12px);
+    border-bottom: 1px solid var(--line);
+  }
+
+  .nav {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    height: 76px;
+  }
+
+  .nav img {
+    height: 40px;
+    display: block;
+  }
+
+  .nav-links {
+    display: flex;
+    align-items: center;
+    gap: 40px;
+  }
+
+  .nav-links a {
+    font-size: 14.5px;
+    font-weight: 500;
+    color: var(--ink-soft);
+    transition: color 0.2s ease;
+  }
+
+  .nav-links a:hover { color: var(--ink); }
+
+  .nav-cta {
+    display: inline-flex;
+    align-items: center;
+    padding: 10px 20px;
+    border-radius: 8px;
+    background: var(--accent);
+    color: var(--ink) !important;
+    font-size: 14px;
+    font-weight: 600;
+    transition: background 0.2s ease;
+  }
+
+  .nav-cta:hover { background: var(--accent-dark); }
+
+  .nav-menu-toggle { display: none; }
+
+  @media (max-width: 860px) {
+    .nav-links a:not(.nav-cta) { display: none; }
+    .nav-links { gap: 16px; }
+  }
+
+  /* ---------- Hero ---------- */
+  .hero {
+    position: relative;
+    padding: 64px 0 76px;
+    background: linear-gradient(165deg, #F3F9F6 0%, #EAF3EF 55%, #E4F1EA 100%);
+    overflow: hidden;
+  }
+
+  .hero::before { content: none; }
+
+  .hero-inner {
+    position: relative;
+    display: grid;
+    grid-template-columns: 1.05fr 0.95fr;
+    align-items: center;
+    gap: 40px;
+  }
+
+  .hero-copy { max-width: 500px; }
+
+  .fade-up {
+    opacity: 0;
+    transform: translateY(14px);
+  }
+
+  .eyebrow {
+    display: flex;
+    align-items: center;
+    gap: 9px;
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 12px;
+    font-weight: 500;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--ink-soft);
+  }
+
+  .eyebrow::before {
+    content: "";
+    width: 16px;
+    height: 1.5px;
+    background: var(--accent);
+    flex-shrink: 0;
+  }
+
+  h1.hero-title {
+    margin-top: 18px;
+    font-size: 44px;
+    font-weight: 600;
+    letter-spacing: -0.02em;
+  }
+
+  .hero-sub {
+    margin-top: 18px;
+    max-width: 460px;
+    font-size: 16.5px;
+    line-height: 1.55;
+    color: var(--ink-soft);
+  }
+
+  .hero-ctas {
+    display: flex;
+    align-items: center;
+    gap: 24px;
+    margin-top: 30px;
+    flex-wrap: wrap;
+  }
+
+  .btn-primary {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 14px 22px;
+    border-radius: 8px;
+    background: var(--accent);
+    color: var(--ink);
+    font-size: 14.5px;
+    font-weight: 600;
+    box-shadow: 0 1px 2px rgba(14,20,32,0.04), 0 0 0 0 rgba(23,204,144,0);
+    transition: transform 0.2s ease, box-shadow 0.2s ease, background 0.2s ease;
+  }
+
+  .btn-primary svg { color: var(--ink); transition: transform 0.2s ease; }
+
+  .btn-primary:hover {
+    background: var(--accent-dark);
+    transform: translateY(-1px);
+    box-shadow: 0 10px 24px -4px rgba(23,204,144,0.55), 0 0 0 4px rgba(23,204,144,0.22);
+  }
+
+  .btn-primary:hover svg { transform: translateX(2px); }
+
+  .btn-secondary {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 14.5px;
+    font-weight: 600;
+    color: var(--ink);
+    padding: 14px 2px;
+    position: relative;
+  }
+
+  .btn-secondary::after {
+    content: "";
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: 11px;
+    height: 1.5px;
+    background: var(--accent);
+    transform: scaleX(0.0);
+    transform-origin: left;
+    transition: transform 0.25s ease;
+  }
+
+  .btn-secondary:hover::after { transform: scaleX(1); }
+
+  .trust-line {
+    margin-top: 30px;
+    padding-top: 20px;
+    border-top: 1px solid var(--line);
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 11.5px;
+    letter-spacing: 0.05em;
+    color: #8A93A3;
+  }
+
+  .trust-line .sep {
+    color: var(--accent);
+    font-size: 8px;
+  }
+
+  .trust-line strong {
+    color: var(--ink);
+    font-weight: 500;
+  }
+
+  /* ---------- Dashboard mockup ---------- */
+  .dashboard-frame {
+    position: relative;
+    opacity: 0;
+    transform: scale(0.98);
+  }
+
+  .dashboard-frame::before {
+    content: "";
+    position: absolute;
+    top: -60px;
+    right: -80px;
+    width: 480px;
+    height: 480px;
+    background: radial-gradient(circle at center, rgba(23,204,144,0.28), rgba(23,204,144,0) 70%);
+    z-index: -2;
+    animation: breathe 7s ease-in-out infinite;
+    pointer-events: none;
+  }
+
+  @keyframes breathe {
+    0%, 100% { opacity: 0.6; transform: scale(1); }
+    50% { opacity: 1; transform: scale(1.08); }
+  }
+
+  .dashboard-frame::after {
+    content: "";
+    position: absolute;
+    top: 18px;
+    left: 18px;
+    right: -18px;
+    bottom: -18px;
+    border: 1px solid var(--line);
+    border-radius: 14px;
+    z-index: -1;
+  }
+
+  .browser-chrome {
+    border-radius: 12px;
+    border: 1px solid var(--line);
+    background: #fff;
+    box-shadow:
+      0 2px 6px rgba(14,20,32,0.04),
+      0 24px 48px -16px rgba(14,20,32,0.18);
+    overflow: hidden;
+  }
+
+  .browser-topbar {
+    display: flex;
+    align-items: center;
+    gap: 7px;
+    padding: 10px 13px;
+    background: var(--bg-subtle);
+    border-bottom: 1px solid var(--line);
+  }
+
+  .browser-dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: #DADFE5;
+  }
+
+  .browser-url {
+    margin-left: 8px;
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 10px;
+    color: #A6AEB9;
+    background: #fff;
+    border: 1px solid var(--line);
+    border-radius: 5px;
+    padding: 3px 10px;
+    flex: 1;
+    max-width: 220px;
+  }
+
+  .dashboard-placeholder {
+    aspect-ratio: 16 / 10;
+    width: 100%;
+    background: linear-gradient(135deg, #FBFCFC 0%, #F3F6F6 100%);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+  }
+
+  .dashboard-placeholder::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background-image:
+      linear-gradient(rgba(14,20,32,0.035) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(14,20,32,0.035) 1px, transparent 1px);
+    background-size: 32px 32px;
+  }
+
+  .dashboard-placeholder-label {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 8px;
+    color: #A6AEB9;
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+    text-align: center;
+    padding: 0 20px;
+  }
+
+  .dashboard-placeholder-label svg { opacity: 0.55; }
+
+  @media (max-width: 900px) {
+    .hero-inner {
+      grid-template-columns: 1fr;
+      gap: 48px;
+    }
+    .hero-copy { max-width: 100%; }
+    .dashboard-frame { max-width: 520px; }
+    .dashboard-frame::after { display: none; }
+  }
+
+  @media (max-width: 640px) {
+    h1.hero-title { font-size: 30px; }
+    .hero-sub { font-size: 15.5px; }
+    .hero { padding: 40px 0 56px; }
+    .hero-ctas { gap: 12px 20px; }
+    .trust-line { flex-wrap: wrap; font-size: 10.5px; }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .fade-up, .dashboard-frame, .fade-scroll, .integration-logo {
+      opacity: 1 !important;
+      transform: none !important;
+    }
+    .dashboard-frame::before {
+      animation: none !important;
+    }
+  }
+
+  /* ---------- Integrations strip ---------- */
+  .integrations {
+    padding: 60px 0 64px;
+    background: var(--bg);
+    border-top: 1px solid var(--line);
+  }
+
+  .integrations-inner {
+    text-align: center;
+  }
+
+  .integrations-title {
+    font-size: 21px;
+    font-weight: 600;
+    color: var(--ink-soft);
+    letter-spacing: -0.01em;
+    max-width: 480px;
+    margin: 0 auto;
+  }
+
+  .fade-scroll {
+    opacity: 0;
+    transform: translateY(14px);
+  }
+
+  .logo-row {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 52px;
+    flex-wrap: wrap;
+    margin-top: 40px;
+  }
+
+  .integration-logo {
+    height: 24px;
+    width: auto;
+    max-width: 112px;
+    object-fit: contain;
+    opacity: 0;
+    transform: translateY(10px);
+    filter: grayscale(1) opacity(0.45);
+    transition: filter 0.35s ease;
+  }
+
+  .integration-logo:hover {
+    filter: grayscale(0) opacity(1);
+  }
+
+  .integrations-trust {
+    margin-top: 36px;
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 12px;
+    letter-spacing: 0.03em;
+    color: #A6AEB9;
+  }
+
+  @media (max-width: 640px) {
+    .logo-row { gap: 32px 36px; }
+    .integration-logo { height: 20px; }
+    .integrations-title { font-size: 18px; }
+  }
+
+  /* ---------- Section 3: Problem statement + video ---------- */
+  .problem {
+    padding: 72px 0 76px;
+    background: var(--bg-subtle);
+  }
+
+  .problem-copy {
+    max-width: 620px;
+    margin: 0 auto;
+    text-align: center;
+  }
+
+  .problem-title {
+    font-size: 34px;
+    font-weight: 600;
+    letter-spacing: -0.015em;
+  }
+
+  .problem-sub {
+    margin-top: 16px;
+    font-size: 16.5px;
+    line-height: 1.6;
+    color: var(--ink-soft);
+  }
+
+  /* Video block */
+  .solution-video {
+    margin-top: 56px;
+    text-align: center;
+  }
+
+  .video-title {
+    font-size: 24px;
+    font-weight: 600;
+    letter-spacing: -0.01em;
+    opacity: 0;
+    transform: translateY(12px);
+  }
+
+  .video-frame {
+    position: relative;
+    max-width: 760px;
+    margin: 32px auto 0;
+    border-radius: 16px;
+    overflow: hidden;
+    opacity: 0;
+    transform: scale(0.96);
+    box-shadow:
+      0 2px 6px rgba(14,20,32,0.05),
+      0 40px 80px -24px rgba(14,20,32,0.28);
+  }
+
+  .video-placeholder {
+    aspect-ratio: 16 / 9;
+    width: 100%;
+    position: relative;
+    background:
+      radial-gradient(circle at 30% 25%, rgba(23,204,144,0.20), transparent 55%),
+      linear-gradient(150deg, #0E1420 0%, #131B27 55%, #0A0F17 100%);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .video-placeholder::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background-image:
+      linear-gradient(rgba(255,255,255,0.035) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(255,255,255,0.035) 1px, transparent 1px);
+    background-size: 36px 36px;
+  }
+
+  .video-caption {
+    position: absolute;
+    left: 24px;
+    bottom: 20px;
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+    color: rgba(255,255,255,0.45);
+  }
+
+  .play-button {
+    position: relative;
+    width: 76px;
+    height: 76px;
+    border-radius: 50%;
+    background: var(--accent);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: none;
+    cursor: pointer;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    box-shadow: 0 0 0 0 rgba(23,204,144,0.35);
+  }
+
+  .play-button svg { color: var(--ink); margin-left: 3px; }
+
+  .play-button:hover {
+    transform: scale(1.05);
+    box-shadow: 0 0 0 16px rgba(23,204,144,0.14), 0 12px 30px -6px rgba(23,204,144,0.55);
+  }
+
+  @media (max-width: 640px) {
+    .problem { padding: 64px 0 72px; }
+    .problem-title { font-size: 27px; }
+    .solution-video { margin-top: 40px; }
+    .video-title { font-size: 19px; }
+    .play-button { width: 60px; height: 60px; }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .video-title, .video-frame {
+      opacity: 1 !important;
+      transform: none !important;
+    }
+  }
+
+  /* ---------- Section 4: Capabilities bento ---------- */
+  .capabilities {
+    position: relative;
+    padding: 72px 0 76px;
+    background: linear-gradient(175deg, #EFF6F2 0%, #E3EFE9 55%, #DCEBE3 100%);
+    border-top: 1px solid var(--line);
+    border-bottom: 1px solid var(--line);
+    overflow: hidden;
+  }
+
+  .capabilities::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background-image: radial-gradient(rgba(14,20,32,0.05) 1px, transparent 1px);
+    background-size: 22px 22px;
+    mask-image: linear-gradient(180deg, rgba(0,0,0,0.9) 0%, rgba(0,0,0,0.35) 60%, transparent 100%);
+    pointer-events: none;
+  }
+
+  .capabilities::after {
+    content: "";
+    position: absolute;
+    top: -160px;
+    right: -140px;
+    width: 620px;
+    height: 620px;
+    background: radial-gradient(circle at center, rgba(23,204,144,0.24), rgba(23,204,144,0) 70%);
+    filter: blur(4px);
+    pointer-events: none;
+  }
+
+  .capabilities .wrap { position: relative; z-index: 1; }
+
+  .cap-tile:not(.cap-tile--dark) { background: #fff; }
+
+  .cap-heading {
+    font-size: 34px;
+    font-weight: 600;
+    letter-spacing: -0.015em;
+    max-width: 620px;
+  }
+
+  .cap-group {
+    margin-top: 36px;
+  }
+
+  .cap-group:first-of-type {
+    margin-top: 32px;
+  }
+
+  .cap-eyebrow {
+    display: flex;
+    align-items: center;
+    gap: 9px;
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 12px;
+    font-weight: 500;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--ink-soft);
+    margin-bottom: 20px;
+  }
+
+  .cap-eyebrow::before {
+    content: "";
+    width: 16px;
+    height: 1.5px;
+    background: var(--accent);
+    flex-shrink: 0;
+  }
+
+  .cap-grid {
+    display: grid;
+    grid-template-columns: 7fr 5fr;
+    gap: 20px;
+    align-items: start;
+  }
+
+  .cap-grid--reverse {
+    grid-template-columns: 5fr 7fr;
+  }
+
+  .cap-tile {
+    position: relative;
+    display: flex;
+    gap: 20px;
+    background: #fff;
+    border: 1px solid var(--line);
+    border-radius: 14px;
+    padding: 20px;
+    opacity: 0;
+    transform: translateY(16px);
+    transition: transform 0.35s ease, box-shadow 0.35s ease, border-color 0.35s ease;
+  }
+
+  .cap-tile:hover {
+    transform: translateY(-4px) scale(1.008);
+    box-shadow: 0 20px 40px -16px rgba(14,20,32,0.14);
+    border-color: #D7DEE3;
+  }
+
+  .cap-tile--lg { flex-direction: row; align-items: center; }
+  .cap-tile--md { flex-direction: column; }
+  .cap-tile--full { flex-direction: row; align-items: center; grid-column: 1 / -1; }
+
+  .cap-icon {
+    width: 30px;
+    height: 30px;
+    border-radius: 8px;
+    background: rgba(23,204,144,0.10);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--accent-dark);
+    flex-shrink: 0;
+    margin-bottom: 10px;
+  }
+
+  .cap-tile-text {
+    display: flex;
+    flex-direction: column;
+  }
+
+  .cap-tile--lg .cap-tile-text, .cap-tile--full .cap-tile-text { flex: 1; }
+  .cap-tile--md .cap-tile-text { width: 100%; }
+
+  .cap-tile-text h3 {
+    font-size: 17px;
+    font-weight: 600;
+    letter-spacing: -0.01em;
+  }
+
+  .cap-tile-text p {
+    margin-top: 8px;
+    font-size: 13.5px;
+    line-height: 1.5;
+    color: var(--ink-soft);
+  }
+
+  .cap-tile-visual {
+    flex: 1;
+    border-radius: 9px;
+    background: linear-gradient(135deg, #FBFCFC 0%, #F3F6F6 100%);
+    border: 1px solid var(--line);
+    position: relative;
+    overflow: hidden;
+    min-height: 100px;
+  }
+
+  .cap-tile--lg .cap-tile-visual, .cap-tile--full .cap-tile-visual { flex: 0 0 260px; width: 260px; aspect-ratio: 4 / 3; }
+  .cap-tile--md .cap-tile-visual { flex: none; margin-top: 14px; width: 100%; max-width: 260px; aspect-ratio: 4 / 3; }
+
+  .cap-tile-visual::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background-image:
+      linear-gradient(rgba(14,20,32,0.035) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(14,20,32,0.035) 1px, transparent 1px);
+    background-size: 28px 28px;
+  }
+
+  .cap-tile-visual svg { position: relative; display: block; }
+
+  .cap-tile--dark {
+    background: linear-gradient(150deg, #0E1420 0%, #131B27 60%, #0A0F17 100%);
+    border-color: #1B2431;
+  }
+
+  .cap-tile--dark:hover { border-color: #2A3644; }
+
+  .cap-tile--dark .cap-icon {
+    background: rgba(23,204,144,0.16);
+    color: var(--accent);
+  }
+
+  .cap-tile--dark .cap-tile-text h3 { color: #fff; }
+  .cap-tile--dark .cap-tile-text p { color: rgba(255,255,255,0.62); }
+
+  .cap-tile--dark .cap-tile-visual {
+    background: linear-gradient(135deg, #161F2C 0%, #0F1620 100%);
+    border-color: #232E3C;
+  }
+
+  .cap-tile--dark .cap-tile-visual::before {
+    background-image:
+      linear-gradient(rgba(255,255,255,0.04) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(255,255,255,0.04) 1px, transparent 1px);
+  }
+
+
+  @media (max-width: 900px) {
+    .cap-grid, .cap-grid--reverse { grid-template-columns: 1fr; }
+    .cap-tile--lg, .cap-tile--full { flex-direction: column; }
+    .cap-tile--lg .cap-tile-text, .cap-tile--full .cap-tile-text { flex: none; width: 100%; }
+    .cap-tile--lg .cap-tile-visual, .cap-tile--full .cap-tile-visual { flex: none; width: 100%; margin-top: 14px; aspect-ratio: 4 / 3; }
+  }
+
+  @media (max-width: 640px) {
+    .capabilities { padding: 48px 0 56px; }
+    .cap-heading { font-size: 25px; }
+    .cap-group { margin-top: 32px; }
+    .cap-tile { padding: 18px; }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .cap-heading, .cap-eyebrow, .cap-tile, .cap-cta {
+      opacity: 1 !important;
+      transform: none !important;
+    }
+  }
+
+  .cap-cta {
+    margin-top: 40px;
+    display: flex;
+    justify-content: center;
+  }
+
+  @media (max-width: 640px) {
+    .cap-cta { margin-top: 32px; }
+  }
+
+  /* ---------- Section 5: How VantisCorp Gets You Live ---------- */
+  .how-it-works {
+    padding: 76px 0 84px;
+    background: var(--bg);
+  }
+
+  .hiw-head {
+    max-width: 560px;
+  }
+
+  .hiw-eyebrow {
+    display: flex;
+    align-items: center;
+    gap: 9px;
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 12px;
+    font-weight: 500;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--ink-soft);
+  }
+
+  .hiw-eyebrow::before {
+    content: "";
+    width: 16px;
+    height: 1.5px;
+    background: var(--accent);
+    flex-shrink: 0;
+  }
+
+  .hiw-title {
+    margin-top: 14px;
+    font-size: 34px;
+    font-weight: 600;
+    letter-spacing: -0.015em;
+  }
+
+  .steps-track {
+    position: relative;
+    max-width: 640px;
+    margin: 52px auto 0;
+    padding-left: 76px;
+  }
+
+  .steps-line-wrap {
+    position: absolute;
+    left: 20px;
+    top: 20px;
+    bottom: 20px;
+    width: 1.5px;
+    background: var(--line);
+  }
+
+  .steps-line-fill {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: var(--accent);
+    transform: scaleY(0);
+    transform-origin: top;
+  }
+
+  .step {
+    position: relative;
+    padding: 0 0 58px;
+  }
+
+  .step:last-child { padding-bottom: 4px; }
+
+  .step-marker {
+    position: absolute;
+    left: -76px;
+    top: 0;
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    background: #fff;
+    border: 1.5px solid var(--line);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 13px;
+    font-weight: 500;
+    color: var(--ink-soft);
+    z-index: 2;
+  }
+
+  .step-content {
+    padding-top: 4px;
+    opacity: 0.15;
+    filter: blur(5px);
+  }
+
+  .step-label {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 11.5px;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--ink-soft);
+  }
+
+  .step-content h3 {
+    margin-top: 8px;
+    font-size: 21px;
+    font-weight: 600;
+    letter-spacing: -0.01em;
+  }
+
+  .step-content p {
+    margin-top: 10px;
+    max-width: 460px;
+    font-size: 15px;
+    line-height: 1.6;
+    color: var(--ink-soft);
+  }
+
+  @media (max-width: 640px) {
+    .how-it-works { padding: 72px 0 80px; }
+    .hiw-title { font-size: 27px; }
+    .steps-track { margin-top: 52px; padding-left: 64px; }
+    .steps-line-wrap { left: 16px; }
+    .step-marker { left: -64px; width: 34px; height: 34px; font-size: 12px; }
+    .step { padding-bottom: 56px; }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .steps-line-fill { transform: scaleY(1) !important; }
+    .step-content { opacity: 1 !important; filter: none !important; }
+    .step-marker { background: var(--accent) !important; border-color: var(--accent) !important; color: #fff !important; }
+  }
+
+  /* ---------- Section 6: Testimonial ---------- */
+  .testimonial {
+    padding: 84px 0 92px;
+    background: #EBF3EF;
+  }
+
+  .testimonial-head {
+    text-align: center;
+    max-width: 560px;
+    margin: 0 auto 52px;
+  }
+
+  .testimonial-eyebrow {
+    display: inline-flex;
+    align-items: center;
+    gap: 9px;
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 12px;
+    font-weight: 500;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--ink-soft);
+    opacity: 0;
+    transform: translateY(12px);
+  }
+
+  .testimonial-eyebrow::before {
+    content: "";
+    width: 16px;
+    height: 1.5px;
+    background: var(--accent);
+    flex-shrink: 0;
+  }
+
+  .testimonial-title {
+    margin-top: 14px;
+    font-size: 32px;
+    font-weight: 600;
+    letter-spacing: -0.015em;
+    opacity: 0;
+    transform: translateY(14px);
+  }
+
+  .testimonial-inner {
+    max-width: 760px;
+    margin: 0 auto;
+    display: flex;
+    gap: 28px;
+  }
+
+  .testimonial-mark {
+    flex-shrink: 0;
+    width: 2px;
+    background: var(--accent);
+    border-radius: 2px;
+    opacity: 0;
+    transform: scaleY(0);
+    transform-origin: top;
+  }
+
+  .testimonial-body { flex: 1; }
+
+  .testimonial-quote-icon {
+    color: var(--accent);
+    opacity: 0;
+    transform: translateY(10px);
+  }
+
+  .testimonial-quote {
+    margin-top: 18px;
+    font-size: 27px;
+    font-weight: 500;
+    line-height: 1.5;
+    letter-spacing: -0.01em;
+    color: var(--ink);
+    opacity: 0;
+    transform: translateY(16px);
+  }
+
+  .testimonial-attribution {
+    margin-top: 28px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    opacity: 0;
+    transform: translateY(16px);
+  }
+
+  .testimonial-avatar {
+    width: 38px;
+    height: 38px;
+    border-radius: 50%;
+    background: rgba(23,204,144,0.12);
+    color: var(--accent-dark);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: 'Space Grotesk', sans-serif;
+    font-size: 14px;
+    font-weight: 600;
+    flex-shrink: 0;
+  }
+
+  .testimonial-attribution-text {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 12px;
+    letter-spacing: 0.03em;
+    color: var(--ink-soft);
+  }
+
+  .testimonial-attribution-text strong {
+    display: block;
+    font-family: 'Inter', sans-serif;
+    font-size: 14px;
+    font-weight: 600;
+    letter-spacing: normal;
+    color: var(--ink);
+    margin-bottom: 2px;
+  }
+
+  @media (max-width: 640px) {
+    .testimonial { padding: 76px 0 84px; }
+    .testimonial-inner { gap: 18px; }
+    .testimonial-quote { font-size: 21px; }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .testimonial-eyebrow, .testimonial-title, .testimonial-mark, .testimonial-quote-icon, .testimonial-quote, .testimonial-attribution {
+      opacity: 1 !important;
+      transform: none !important;
+    }
+  }
+
+  /* ---------- Section 7: Integrations showcase ---------- */
+  .integrations-showcase {
+    padding: 72px 0 78px;
+    background: var(--bg);
+  }
+
+  .showcase-head {
+    max-width: 560px;
+    margin: 0 auto;
+    text-align: center;
+  }
+
+  .showcase-eyebrow {
+    display: inline-flex;
+    align-items: center;
+    gap: 9px;
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 12px;
+    font-weight: 500;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--ink-soft);
+    opacity: 0;
+    transform: translateY(12px);
+  }
+
+  .showcase-eyebrow::before {
+    content: "";
+    width: 16px;
+    height: 1.5px;
+    background: var(--accent);
+    flex-shrink: 0;
+  }
+
+  .showcase-title {
+    margin-top: 14px;
+    font-size: 32px;
+    font-weight: 600;
+    letter-spacing: -0.015em;
+    opacity: 0;
+    transform: translateY(14px);
+  }
+
+  .showcase-grid {
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    gap: 18px;
+    max-width: 980px;
+    margin: 40px auto 0;
+  }
+
+  .showcase-tile {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    aspect-ratio: 1 / 1;
+    background: #fff;
+    border: 1px solid var(--line);
+    border-radius: 14px;
+    padding: 20px;
+    opacity: 0;
+    transform: translateY(14px);
+    transition: transform 0.3s ease, box-shadow 0.3s ease, border-color 0.3s ease;
+  }
+
+  .showcase-tile:hover {
+    transform: translateY(-3px) scale(1.03);
+    box-shadow: 0 16px 32px -12px rgba(14,20,32,0.14);
+    border-color: var(--accent);
+  }
+
+  .showcase-tile img {
+    max-width: 100%;
+    max-height: 34px;
+    width: auto;
+    height: auto;
+    filter: grayscale(1) opacity(0.5);
+    transition: filter 0.35s ease;
+  }
+
+  .showcase-tile:hover img {
+    filter: grayscale(0) opacity(1);
+  }
+
+  @media (max-width: 860px) {
+    .showcase-grid { grid-template-columns: repeat(3, 1fr); }
+  }
+
+  @media (max-width: 560px) {
+    .showcase-grid { grid-template-columns: repeat(2, 1fr); gap: 14px; margin-top: 40px; }
+    .integrations-showcase { padding: 64px 0 72px; }
+    .showcase-title { font-size: 25px; }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .showcase-title, .showcase-eyebrow, .showcase-tile {
+      opacity: 1 !important;
+      transform: none !important;
+    }
+  }
+
+  /* ---------- Section 8: Demo booking CTA ---------- */
+  .demo-cta {
+    padding: 80px 0 88px;
+    background: linear-gradient(175deg, #F3F9F6 0%, #EAF3EF 100%);
+  }
+
+  .demo-inner {
+    display: grid;
+    grid-template-columns: 0.85fr 1fr;
+    gap: 64px;
+    align-items: start;
+    opacity: 0;
+    transform: translateY(18px);
+  }
+
+  .demo-copy { max-width: 380px; }
+
+  .demo-eyebrow {
+    display: flex;
+    align-items: center;
+    gap: 9px;
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 12px;
+    font-weight: 500;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--ink-soft);
+  }
+
+  .demo-eyebrow::before {
+    content: "";
+    width: 16px;
+    height: 1.5px;
+    background: var(--accent);
+    flex-shrink: 0;
+  }
+
+  .demo-title {
+    margin-top: 16px;
+    font-size: 34px;
+    font-weight: 600;
+    letter-spacing: -0.015em;
+  }
+
+  .demo-sub {
+    margin-top: 14px;
+    font-size: 16px;
+    color: var(--ink-soft);
+  }
+
+  .demo-points {
+    margin-top: 36px;
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+  }
+
+  .demo-point {
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+    font-size: 14px;
+    color: var(--ink-soft);
+  }
+
+  .demo-point svg { flex-shrink: 0; margin-top: 2px; color: var(--accent-dark); }
+
+  .demo-form-card {
+    background: #fff;
+    border: 1px solid var(--line);
+    border-radius: 16px;
+    padding: 40px;
+    box-shadow: 0 30px 60px -30px rgba(14,20,32,0.16);
+  }
+
+  .demo-form-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 20px;
+    margin-top: 22px;
+  }
+
+  .demo-form-row:first-child { margin-top: 0; }
+
+  .demo-field {
+    display: flex;
+    flex-direction: column;
+  }
+
+  .demo-field label {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+    color: var(--ink-soft);
+    margin-bottom: 8px;
+  }
+
+  .demo-field input {
+    font-family: 'Inter', sans-serif;
+    font-size: 15px;
+    color: var(--ink);
+    background: transparent;
+    border: none;
+    border-bottom: 1.5px solid var(--line);
+    padding: 8px 2px;
+    transition: border-color 0.25s ease, box-shadow 0.25s ease;
+  }
+
+  .demo-field input::placeholder { color: #A6AEB9; }
+
+  .demo-field input:focus {
+    outline: none;
+    border-bottom-color: var(--accent);
+    box-shadow: 0 1px 0 0 var(--accent);
+  }
+
+  .demo-submit {
+    margin-top: 30px;
+    width: 100%;
+    justify-content: center;
+    border: none;
+    cursor: pointer;
+  }
+
+  .demo-form-note {
+    margin-top: 16px;
+    text-align: center;
+    font-size: 12px;
+    color: #A6AEB9;
+  }
+
+  @media (max-width: 860px) {
+    .demo-inner { grid-template-columns: 1fr; gap: 44px; }
+    .demo-copy { max-width: 100%; }
+  }
+
+  @media (max-width: 640px) {
+    .demo-cta { padding: 72px 0 80px; }
+    .demo-title { font-size: 26px; }
+    .demo-form-card { padding: 26px; }
+    .demo-form-row { grid-template-columns: 1fr; gap: 0; }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .demo-inner { opacity: 1 !important; transform: none !important; }
+  }
+
+  /* ---------- Section 9: Insights ---------- */
+  .insights {
+    padding: 72px 0 78px;
+    background: var(--bg);
+  }
+
+  .insights-head {
+    display: flex;
+    align-items: flex-end;
+    justify-content: space-between;
+    gap: 24px;
+    flex-wrap: wrap;
+  }
+
+  .insights-eyebrow {
+    display: flex;
+    align-items: center;
+    gap: 9px;
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 12px;
+    font-weight: 500;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--ink-soft);
+    opacity: 0;
+    transform: translateY(12px);
+  }
+
+  .insights-eyebrow::before {
+    content: "";
+    width: 16px;
+    height: 1.5px;
+    background: var(--accent);
+    flex-shrink: 0;
+  }
+
+  .insights-title {
+    margin-top: 14px;
+    font-size: 32px;
+    font-weight: 600;
+    letter-spacing: -0.015em;
+    opacity: 0;
+    transform: translateY(14px);
+  }
+
+  .insights-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 20px;
+    margin-top: 44px;
+  }
+
+  .insight-card {
+    display: flex;
+    flex-direction: column;
+    background: #fff;
+    border: 1px solid var(--line);
+    border-radius: 14px;
+    overflow: hidden;
+    opacity: 0;
+    transform: translateY(16px);
+    transition: transform 0.35s ease, box-shadow 0.35s ease, border-color 0.35s ease;
+  }
+
+  .insight-card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 20px 40px -16px rgba(14,20,32,0.14);
+    border-color: #D7DEE3;
+  }
+
+  .insight-card-image {
+    aspect-ratio: 4 / 3;
+    position: relative;
+    background: linear-gradient(135deg, #FBFCFC 0%, #F3F6F6 100%);
+    border-bottom: 1px solid var(--line);
+    overflow: hidden;
+  }
+
+  .insight-card-image::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background-image:
+      linear-gradient(rgba(14,20,32,0.035) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(14,20,32,0.035) 1px, transparent 1px);
+    background-size: 26px 26px;
+  }
+
+  .insight-card-body {
+    padding: 22px;
+    display: flex;
+    flex-direction: column;
+    flex: 1;
+  }
+
+  .insight-tag {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 10.5px;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: var(--accent-dark);
+  }
+
+  .insight-card-body h3 {
+    margin-top: 10px;
+    font-size: 17px;
+    font-weight: 600;
+    letter-spacing: -0.005em;
+    line-height: 1.35;
+  }
+
+  .insight-card-body p {
+    margin-top: 8px;
+    font-size: 13.5px;
+    line-height: 1.55;
+    color: var(--ink-soft);
+    flex: 1;
+  }
+
+  .insight-read-more {
+    margin-top: 16px;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 13.5px;
+    font-weight: 600;
+    color: var(--ink);
+  }
+
+  .insight-read-more svg { transition: transform 0.2s ease; }
+  .insight-card:hover .insight-read-more svg { transform: translateX(2px); }
+
+  .insights-footer-link {
+    margin-top: 32px;
+    text-align: center;
+    opacity: 0;
+    transform: translateY(14px);
+  }
+
+  @media (max-width: 860px) {
+    .insights-grid { grid-template-columns: 1fr; }
+  }
+
+  @media (max-width: 640px) {
+    .insights { padding: 64px 0 72px; }
+    .insights-title { font-size: 25px; }
+    .insights-grid { margin-top: 32px; }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .insights-eyebrow, .insights-title, .insight-card, .insights-footer-link {
+      opacity: 1 !important;
+      transform: none !important;
+    }
+  }
+
+  /* ---------- Footer ---------- */
+  footer {
+    background: var(--ink);
+    padding: 64px 0 32px;
+  }
+
+  .footer-inner {
+    display: grid;
+    grid-template-columns: 1.4fr 1fr 1fr;
+    gap: 40px;
+    opacity: 0;
+    transform: translateY(14px);
+  }
+
+  .footer-brand img { height: 32px; display: block; }
+
+  .footer-tagline {
+    margin-top: 16px;
+    max-width: 280px;
+    font-size: 14px;
+    line-height: 1.6;
+    color: rgba(255,255,255,0.5);
+  }
+
+  .footer-col-title {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: rgba(255,255,255,0.4);
+  }
+
+  .footer-links {
+    margin-top: 18px;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+  }
+
+  .footer-links a {
+    font-size: 14px;
+    color: rgba(255,255,255,0.72);
+    transition: color 0.2s ease;
+  }
+
+  .footer-links a:hover { color: #fff; }
+
+  .footer-bottom {
+    margin-top: 56px;
+    padding-top: 24px;
+    border-top: 1px solid rgba(255,255,255,0.10);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+    flex-wrap: wrap;
+  }
+
+  .footer-copyright {
+    font-size: 12.5px;
+    color: rgba(255,255,255,0.4);
+  }
+
+  .footer-legal {
+    display: flex;
+    gap: 24px;
+  }
+
+  .footer-legal a {
+    font-size: 12.5px;
+    color: rgba(255,255,255,0.4);
+    transition: color 0.2s ease;
+  }
+
+  .footer-legal a:hover { color: rgba(255,255,255,0.8); }
+
+  @media (max-width: 700px) {
+    .footer-inner { grid-template-columns: 1fr; gap: 32px; }
+    .footer-bottom { flex-direction: column; align-items: flex-start; }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .footer-inner { opacity: 1 !important; transform: none !important; }
+  }
+
+  /* ================= Leadership page ================= */
+
+  /* ---------- Section 1: Page header ---------- */
+  .page-header {
+    padding: 72px 0 56px;
+    background: linear-gradient(165deg, #F3F9F6 0%, #EAF3EF 55%, #E4F1EA 100%);
+    text-align: center;
+  }
+
+  .page-header-eyebrow {
+    display: inline-flex;
+    align-items: center;
+    gap: 9px;
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 12px;
+    font-weight: 500;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--ink-soft);
+    opacity: 0;
+    transform: translateY(12px);
+  }
+
+  .page-header-eyebrow::before {
+    content: "";
+    width: 16px;
+    height: 1.5px;
+    background: var(--accent);
+    flex-shrink: 0;
+  }
+
+  .page-header h1 {
+    margin-top: 16px;
+    font-size: 42px;
+    font-weight: 600;
+    letter-spacing: -0.02em;
+    max-width: 680px;
+    margin-left: auto;
+    margin-right: auto;
+    opacity: 0;
+    transform: translateY(14px);
+  }
+
+  @media (max-width: 640px) {
+    .page-header { padding: 48px 0 40px; }
+    .page-header h1 { font-size: 28px; }
+  }
+
+  /* ---------- Section 4: About / Why We Built This ---------- */
+  .about-vantis {
+    padding: 72px 0 76px;
+    background: var(--bg);
+  }
+
+  .about-inner {
+    max-width: 680px;
+    margin: 0 auto;
+    text-align: center;
+    opacity: 0;
+    transform: translateY(16px);
+  }
+
+  .about-inner h2 {
+    font-size: 32px;
+    font-weight: 600;
+    letter-spacing: -0.015em;
+  }
+
+  .about-inner p {
+    margin-top: 18px;
+    font-size: 16.5px;
+    line-height: 1.65;
+    color: var(--ink-soft);
+  }
+
+  @media (max-width: 640px) {
+    .about-vantis { padding: 56px 0 60px; }
+    .about-inner h2 { font-size: 25px; }
+    .about-inner p { font-size: 15.5px; }
+  }
+
+  /* ---------- Section 3: What VantisCorp is Building ---------- */
+  .building {
+    padding: 72px 0 76px;
+    background: var(--bg);
+    border-top: 1px solid var(--line);
+  }
+
+  .building-head {
+    max-width: 640px;
+    opacity: 0;
+    transform: translateY(14px);
+  }
+
+  .building-head h2 {
+    font-size: 32px;
+    font-weight: 600;
+    letter-spacing: -0.015em;
+  }
+
+  .building-head p {
+    margin-top: 14px;
+    font-size: 16px;
+    line-height: 1.6;
+    color: var(--ink-soft);
+  }
+
+  .building-list {
+    margin-top: 40px;
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    gap: 0;
+    border-top: 1px solid var(--line);
+  }
+
+  .building-item {
+    padding: 22px 20px 22px 0;
+    border-right: 1px solid var(--line);
+    opacity: 0;
+    transform: translateY(14px);
+  }
+
+  .building-item:last-child { border-right: none; }
+
+  .building-item h3 {
+    font-family: 'Space Grotesk', sans-serif;
+    font-size: 15px;
+    font-weight: 600;
+    letter-spacing: -0.005em;
+    color: var(--ink);
+  }
+
+  .building-item p {
+    margin-top: 8px;
+    font-size: 13px;
+    line-height: 1.5;
+    color: var(--ink-soft);
+  }
+
+  .building-vision {
+    margin-top: 36px;
+    padding-top: 28px;
+    border-top: 1px solid var(--line);
+    max-width: 640px;
+    font-size: 16px;
+    line-height: 1.6;
+    color: var(--ink-soft);
+    opacity: 0;
+    transform: translateY(14px);
+  }
+
+  @media (max-width: 900px) {
+    .building-list { grid-template-columns: repeat(2, 1fr); }
+    .building-item { border-right: none; border-bottom: 1px solid var(--line); padding: 20px 0; }
+    .building-item:nth-child(odd) { padding-right: 20px; }
+  }
+
+  @media (max-width: 640px) {
+    .building { padding: 56px 0 60px; }
+    .building-head h2 { font-size: 25px; }
+    .building-list { grid-template-columns: 1fr; margin-top: 32px; }
+    .building-item { border-right: none; border-bottom: 1px solid var(--line); padding: 18px 0; }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .building-head, .building-item, .building-vision {
+      opacity: 1 !important;
+      transform: none !important;
+    }
+  }
+
+  /* ---------- Section 2: Leadership masthead (editorial) ---------- */
+  .leadership {
+    position: relative;
+    padding: 88px 0 96px;
+    background: linear-gradient(160deg, #F3F9F6 0%, #EEF5F1 45%, #E7F1EA 100%);
+    overflow: hidden;
+  }
+
+  .leadership::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background-image: radial-gradient(rgba(14,20,32,0.05) 1px, transparent 1px);
+    background-size: 24px 24px;
+    mask-image: radial-gradient(circle at 75% 15%, rgba(0,0,0,0.9) 0%, rgba(0,0,0,0.25) 45%, transparent 75%);
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  .leadership-shape {
+    position: absolute;
+    top: -140px;
+    right: -160px;
+    width: 460px;
+    height: 460px;
+    border-radius: 50%;
+    border: 1.5px solid rgba(23,204,144,0.28);
+    pointer-events: none;
+    z-index: 0;
+    animation: leadershipRingBreathe 8s ease-in-out infinite;
+  }
+
+  @keyframes leadershipRingBreathe {
+    0%, 100% { opacity: 0.7; transform: scale(1); }
+    50% { opacity: 1; transform: scale(1.04); }
+  }
+
+  .leadership-shape::after {
+    content: "";
+    position: absolute;
+    inset: 60px;
+    border-radius: 50%;
+    border: 1px solid rgba(23,204,144,0.18);
+  }
+
+  .leadership-shape::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    border-radius: 50%;
+    background: radial-gradient(circle at center, rgba(23,204,144,0.10), rgba(23,204,144,0) 70%);
+  }
+
+  .leadership-accent {
+    position: absolute;
+    left: -60px;
+    bottom: -80px;
+    width: 220px;
+    height: 220px;
+    border-radius: 50%;
+    border: 1px solid rgba(23,204,144,0.16);
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  .leadership-eyebrow {
+    position: relative;
+    z-index: 1;
+    display: flex;
+    align-items: center;
+    gap: 9px;
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 12px;
+    font-weight: 500;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--ink-soft);
+    opacity: 0;
+    transform: translateY(12px);
+  }
+
+  .leadership-eyebrow::before {
+    content: "";
+    width: 16px;
+    height: 1.5px;
+    background: var(--accent);
+    flex-shrink: 0;
+  }
+
+  .leadership-masthead {
+    position: relative;
+    z-index: 1;
+    margin-top: 40px;
+  }
+
+  .leader-entry {
+    padding: 40px 0;
+    border-top: 1px solid var(--line);
+  }
+
+  .leader-entry:first-child {
+    border-top: 1px solid var(--line);
+  }
+
+  .leader-index {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 12px;
+    letter-spacing: 0.05em;
+    color: #A6AEB9;
+  }
+
+  .leader-mega-name {
+    margin-top: 6px;
+    font-size: clamp(40px, 7vw, 86px);
+    font-weight: 600;
+    letter-spacing: -0.025em;
+    line-height: 0.98;
+    white-space: nowrap;
+    overflow: hidden;
+    clip-path: inset(0 100% 0 0);
+  }
+
+  .leader-meta {
+    display: flex;
+    align-items: flex-start;
+    gap: 28px;
+    margin-top: 26px;
+  }
+
+  .leader-photo-wrap {
+    position: relative;
+    flex-shrink: 0;
+    width: 120px;
+    height: 150px;
+    background: linear-gradient(150deg, #EEF3F1 0%, #E3EAE7 100%);
+    overflow: hidden;
+    opacity: 0;
+    transform: scale(0.92);
+  }
+
+  .leader-photo-wrap::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background-image: radial-gradient(rgba(14,20,32,0.05) 1px, transparent 1px);
+    background-size: 18px 18px;
+  }
+
+  .leader-photo-fallback {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #B7C0C6;
+    font-family: 'Space Grotesk', sans-serif;
+    font-size: 30px;
+    font-weight: 600;
+  }
+
+  .leader-photo-wrap img {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    z-index: 1;
+  }
+
+  .leader-meta-text {
+    max-width: 480px;
+    padding-top: 4px;
+  }
+
+  .leader-title {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 11.5px;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+    color: var(--accent-dark);
+  }
+
+  .leader-title::before {
+    content: "";
+    width: 10px;
+    height: 1.5px;
+    background: var(--accent);
+    flex-shrink: 0;
+  }
+
+  .leader-linkedin {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 26px;
+    height: 26px;
+    border-radius: 50%;
+    border: 1px solid var(--line);
+    background: #fff;
+    color: var(--ink-soft);
+    margin-left: 4px;
+    transition: background 0.2s ease, border-color 0.2s ease, color 0.2s ease, transform 0.2s ease;
+  }
+
+  .leader-linkedin:hover {
+    background: var(--accent);
+    border-color: var(--accent);
+    color: var(--ink);
+    transform: translateY(-1px);
+  }
+
+  .leader-bio {
+    margin-top: 12px;
+    font-size: 14.5px;
+    line-height: 1.65;
+    color: var(--ink-soft);
+  }
+
+  @media (max-width: 860px) {
+    .leader-mega-name { font-size: clamp(30px, 10vw, 52px); white-space: normal; }
+    .leader-meta { flex-direction: column; gap: 16px; }
+    .leader-photo-wrap { width: 96px; height: 120px; }
+  }
+
+  @media (max-width: 640px) {
+    .leadership { padding: 56px 0 60px; }
+    .leader-entry { padding: 28px 0; }
+    .leadership-shape { width: 280px; height: 280px; top: -100px; right: -110px; }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .leader-mega-name { clip-path: inset(0 0 0 0) !important; }
+    .leader-photo-wrap { opacity: 1 !important; transform: none !important; }
+    .leadership-shape { animation: none !important; }
+  }
+
+  /* ---------- Section 5: Credibility stat strip ---------- */
+  .credibility {
+    padding: 40px 0;
+    background: var(--bg);
+    border-top: 1px solid var(--line);
+    border-bottom: 1px solid var(--line);
+    text-align: center;
+  }
+
+  .credibility-line {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 12.5px;
+    letter-spacing: 0.04em;
+    color: var(--ink-soft);
+    max-width: 720px;
+    margin: 0 auto;
+    line-height: 1.8;
+    opacity: 0;
+    transform: translateY(12px);
+  }
+
+  .credibility-line strong {
+    color: var(--ink);
+    font-weight: 500;
+  }
+
+  .credibility-line .sep {
+    color: var(--accent);
+    margin: 0 4px;
+  }
+
+  @media (max-width: 640px) {
+    .credibility { padding: 32px 0; }
+    .credibility-line { font-size: 11.5px; }
+  }
+
+  /* ---------- Section 6: Closing CTA ---------- */
+  .leadership-cta {
+    padding: 88px 0 96px;
+    background: linear-gradient(175deg, #F3F9F6 0%, #EAF3EF 100%);
+    text-align: center;
+  }
+
+  .leadership-cta-inner {
+    opacity: 0;
+    transform: translateY(16px);
+  }
+
+  .leadership-cta h2 {
+    font-size: 32px;
+    font-weight: 600;
+    letter-spacing: -0.015em;
+  }
+
+  .leadership-cta .btn-primary {
+    margin-top: 26px;
+    display: inline-flex;
+  }
+
+  @media (max-width: 640px) {
+    .leadership-cta { padding: 56px 0 64px; }
+    .leadership-cta h2 { font-size: 24px; }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .page-header-eyebrow, .page-header h1, .about-inner,
+    .leadership-eyebrow, .credibility-line, .leadership-cta-inner {
+      opacity: 1 !important;
+      transform: none !important;
+    }
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="wrap nav">
+    <a href="index.html" aria-label="VantisCorp home">
+      <img src="assets/logo-png.png" alt="VantisCorp logo">
+    </a>
+    <nav class="nav-links">
+      <a href="index.html#capabilities">Capabilities</a>
+      <a href="index.html#how-it-works">How It Works</a>
+      <a href="index.html#integrations">Integrations</a>
+      <a href="index.html#insights">Insights</a>
+      <a href="index.html#demo" class="nav-cta">Book a Demo</a>
+    </nav>
+  </div>
+</header>
+
+<section class="page-header">
+  <div class="wrap">
+    <p class="page-header-eyebrow">Leadership</p>
+    <h1>The People Building VantisCorp</h1>
+  </div>
+</section>
+
+<section class="leadership">
+  <div class="leadership-shape"></div>
+  <div class="leadership-accent"></div>
+  <div class="wrap">
+    <p class="leadership-eyebrow">The Team</p>
+
+    <div class="leadership-masthead">
+      <article class="leader-entry" data-leader-index="0">
+        <p class="leader-index">01</p>
+        <h3 class="leader-mega-name">Amol Raut</h3>
+        <div class="leader-meta">
+          <div class="leader-photo-wrap">
+            <span class="leader-photo-fallback">AR</span>
+            <img src="assets/team/amol-raut.jpg" alt="Amol Raut" onerror="this.remove()">
+          </div>
+          <div class="leader-meta-text">
+            <p class="leader-title">
+              Co-Founder &amp; CEO
+              <a href="#" class="leader-linkedin" aria-label="Amol Raut on LinkedIn" target="_blank" rel="noopener">
+                <svg width="13" height="13" viewBox="0 0 24 24" fill="currentColor"><path d="M20.45 20.45h-3.56v-5.57c0-1.33-.02-3.04-1.85-3.04-1.85 0-2.14 1.45-2.14 2.94v5.67H9.34V9h3.41v1.56h.05c.48-.9 1.64-1.85 3.38-1.85 3.6 0 4.27 2.37 4.27 5.45v6.29ZM5.34 7.43a2.06 2.06 0 1 1 0-4.13 2.06 2.06 0 0 1 0 4.13ZM3.56 20.45h3.57V9H3.56v11.45Z"/></svg>
+              </a>
+            </p>
+            <p class="leader-bio">Amol leads product and company strategy at VantisCorp. Before founding VantisCorp, he spent years building travel technology at Tavisca and Chase Travel, working closely with how global travel platforms operate at scale. That experience shaped his conviction that TMCs deserve modern, white-label software of their own, not another layer of manual work.</p>
+          </div>
+        </div>
+      </article>
+
+      <article class="leader-entry" data-leader-index="1">
+        <p class="leader-index">02</p>
+        <h3 class="leader-mega-name">Vijendra "VJ" Singh</h3>
+        <div class="leader-meta">
+          <div class="leader-photo-wrap">
+            <span class="leader-photo-fallback">VS</span>
+            <img src="assets/team/vijendra-singh.jpg" alt="Vijendra VJ Singh" onerror="this.remove()">
+          </div>
+          <div class="leader-meta-text">
+            <p class="leader-title">
+              Co-Founder &amp; CCO
+              <a href="#" class="leader-linkedin" aria-label="Vijendra VJ Singh on LinkedIn" target="_blank" rel="noopener">
+                <svg width="13" height="13" viewBox="0 0 24 24" fill="currentColor"><path d="M20.45 20.45h-3.56v-5.57c0-1.33-.02-3.04-1.85-3.04-1.85 0-2.14 1.45-2.14 2.94v5.67H9.34V9h3.41v1.56h.05c.48-.9 1.64-1.85 3.38-1.85 3.6 0 4.27 2.37 4.27 5.45v6.29ZM5.34 7.43a2.06 2.06 0 1 1 0-4.13 2.06 2.06 0 0 1 0 4.13ZM3.56 20.45h3.57V9H3.56v11.45Z"/></svg>
+              </a>
+            </p>
+            <p class="leader-bio">VJ leads commercial strategy and partnerships at VantisCorp. He previously worked at Vervotech, a Juniper company, where he was closely involved in travel supply and distribution technology. That vantage point into how TMCs source and manage inventory drives how VantisCorp builds for them today.</p>
+          </div>
+        </div>
+      </article>
+
+      <article class="leader-entry" data-leader-index="2">
+        <p class="leader-index">03</p>
+        <h3 class="leader-mega-name">Kajal Makhija</h3>
+        <div class="leader-meta">
+          <div class="leader-photo-wrap">
+            <span class="leader-photo-fallback">KM</span>
+            <img src="assets/team/kajal-makhija.jpg" alt="Kajal Makhija" onerror="this.remove()">
+          </div>
+          <div class="leader-meta-text">
+            <p class="leader-title">
+              CMO
+              <a href="#" class="leader-linkedin" aria-label="Kajal Makhija on LinkedIn" target="_blank" rel="noopener">
+                <svg width="13" height="13" viewBox="0 0 24 24" fill="currentColor"><path d="M20.45 20.45h-3.56v-5.57c0-1.33-.02-3.04-1.85-3.04-1.85 0-2.14 1.45-2.14 2.94v5.67H9.34V9h3.41v1.56h.05c.48-.9 1.64-1.85 3.38-1.85 3.6 0 4.27 2.37 4.27 5.45v6.29ZM5.34 7.43a2.06 2.06 0 1 1 0-4.13 2.06 2.06 0 0 1 0 4.13ZM3.56 20.45h3.57V9H3.56v11.45Z"/></svg>
+              </a>
+            </p>
+            <p class="leader-bio">Kajal leads marketing at VantisCorp, building the company's brand, content, and go-to-market from the ground up. She works closely with Amol and VJ to make sure VantisCorp's positioning reflects what TMCs actually need, not just what's easy to market.</p>
+          </div>
+        </div>
+      </article>
+    </div>
+  </div>
+</section>
+
+<section class="building" id="building">
+  <div class="wrap">
+    <div class="building-head">
+      <h2>What VantisCorp is Building</h2>
+      <p>A single platform that lets TMCs run modern travel technology under their own brand, without becoming a technology company themselves.</p>
+    </div>
+
+    <div class="building-list">
+      <div class="building-item">
+        <h3>Hotel Booking Engine</h3>
+        <p>Negotiated rates and policy built into every search.</p>
+      </div>
+      <div class="building-item">
+        <h3>Flight Booking Engine</h3>
+        <p>Fare rules and approvals applied automatically.</p>
+      </div>
+      <div class="building-item">
+        <h3>Mid Office Automation</h3>
+        <p>Policy exceptions flagged in real time.</p>
+      </div>
+      <div class="building-item">
+        <h3>Back Office Automation</h3>
+        <p>Invoices reconciled with correct GST codes.</p>
+      </div>
+      <div class="building-item">
+        <h3>AI Agents</h3>
+        <p>Early access, handling requests end to end.</p>
+      </div>
+    </div>
+
+    <p class="building-vision">We're building toward a future where every TMC, regardless of size, can offer the same modern booking experience as the world's largest travel platforms.</p>
+  </div>
+</section>
+
+<section class="about-vantis">
+  <div class="wrap">
+    <div class="about-inner">
+      <h2>Why We Built VantisCorp</h2>
+      <p>Travel Management Companies have spent years piecing together spreadsheets, inboxes, and outdated tools to run their business. VantisCorp exists to change that; a corporate travel management platform TMCs can run entirely under their own brand, without needing to become a technology company themselves. We built it because the industry deserved software as modern as the travel it manages.</p>
+    </div>
+  </div>
+</section>
+
+<section class="credibility">
+  <div class="wrap">
+    <p class="credibility-line">
+      <strong>[X]+</strong> Years Combined in Travel Technology
+      <span class="sep">·</span>
+      Built at Tavisca, Chase Travel, Vervotech (a Juniper company)
+    </p>
+  </div>
+</section>
+
+<section class="leadership-cta">
+  <div class="wrap">
+    <div class="leadership-cta-inner">
+      <h2>Want to see what we've built?</h2>
+      <a href="index.html#demo" class="btn-primary">
+        Book a Demo
+        <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+          <path d="M3.5 8H12.5M12.5 8L8.5 4M12.5 8L8.5 12" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </a>
+    </div>
+  </div>
+</section>
+
+<footer id="site-footer">
+  <div class="wrap">
+    <div class="footer-inner">
+      <div class="footer-brand">
+        <img src="assets/logo-white.png" alt="VantisCorp logo">
+        <p class="footer-tagline">The corporate travel management software your TMC runs on.</p>
+      </div>
+
+      <div class="footer-col">
+        <p class="footer-col-title">Product</p>
+        <nav class="footer-links">
+          <a href="index.html#capabilities">Capabilities</a>
+          <a href="index.html#how-it-works">How It Works</a>
+          <a href="index.html#integrations">Integrations</a>
+          <a href="index.html#insights">Insights</a>
+        </nav>
+      </div>
+
+      <div class="footer-col">
+        <p class="footer-col-title">Company</p>
+        <nav class="footer-links">
+          <a href="index.html#demo">Book a Demo</a>
+          <a href="leadership.html">Leadership</a>
+          <a href="#">Contact</a>
+        </nav>
+      </div>
+    </div>
+
+    <div class="footer-bottom">
+      <p class="footer-copyright">© 2026 VantisCorp. All rights reserved.</p>
+      <nav class="footer-legal">
+        <a href="#">Privacy</a>
+        <a href="#">Terms</a>
+        <a href="#">DPA</a>
+      </nav>
+    </div>
+  </div>
+</footer>
+
+<script type="module">
+  import Lenis from "https://esm.sh/lenis";
+  import { animate, inView, stagger } from "https://esm.sh/motion";
+
+  const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  if (prefersReducedMotion) {
+    document.querySelectorAll('.page-header-eyebrow, .page-header h1, .about-inner, .leadership-eyebrow, .leader-mega-name, .leader-photo-wrap, .building-head, .building-item, .building-vision, .credibility-line, .leadership-cta-inner, .footer-inner')
+      .forEach(el => { el.style.opacity = 1; el.style.transform = 'none'; });
+  } else {
+    // Smooth scroll
+    const lenis = new Lenis();
+    function raf(time) {
+      lenis.raf(time);
+      requestAnimationFrame(raf);
+    }
+    requestAnimationFrame(raf);
+
+    // Section 1: page header — eyebrow then H1
+    animate('.page-header-eyebrow', { opacity: 1, y: 0 }, { duration: 0.5, easing: 'ease-out' });
+    animate('.page-header h1', { opacity: 1, y: 0 }, { duration: 0.6, delay: 0.1, easing: 'ease-out' });
+
+    // Section 2: leadership masthead — eyebrow fades in, then each name does a
+    // confident left-to-right clip-path wipe as its row scrolls into view,
+    // with its photo fading + scaling in just after.
+    inView('.leadership-eyebrow', () => {
+      animate('.leadership-eyebrow', { opacity: 1, y: 0 }, { duration: 0.45, easing: 'ease-out' });
+    }, { amount: 0.6 });
+
+    document.querySelectorAll('.leader-entry').forEach(entry => {
+      inView(entry, () => {
+        const name = entry.querySelector('.leader-mega-name');
+        const photo = entry.querySelector('.leader-photo-wrap');
+        animate(name, { clipPath: 'inset(0 0% 0 0)' }, { duration: 0.9, easing: [0.16, 1, 0.3, 1] });
+        animate(photo, { opacity: 1, scale: 1 }, { duration: 0.7, delay: 0.25, easing: 'ease-out' });
+      }, { amount: 0.4 });
+    });
+
+    // Section 3: What VantisCorp is Building — head, then 5 items staggered, then vision line
+    inView('.building', () => {
+      animate('.building-head', { opacity: 1, y: 0 }, { duration: 0.5, easing: 'ease-out' });
+      animate('.building-item', { opacity: 1, y: 0 }, { duration: 0.45, delay: stagger(0.08, { start: 0.2 }), easing: 'ease-out' });
+      animate('.building-vision', { opacity: 1, y: 0 }, { duration: 0.5, delay: 0.7, easing: 'ease-out' });
+    }, { amount: 0.15 });
+
+    // Section 4: about — fade + slide up on scroll
+    inView('.about-vantis', () => {
+      animate('.about-inner', { opacity: 1, y: 0 }, { duration: 0.6, easing: 'ease-out' });
+    }, { amount: 0.3 });
+
+    // Section 5: credibility stat strip
+    inView('.credibility', () => {
+      animate('.credibility-line', { opacity: 1, y: 0 }, { duration: 0.5, easing: 'ease-out' });
+    }, { amount: 0.5 });
+
+    // Section 6: closing CTA
+    inView('.leadership-cta', () => {
+      animate('.leadership-cta-inner', { opacity: 1, y: 0 }, { duration: 0.55, easing: 'ease-out' });
+    }, { amount: 0.4 });
+
+    // Footer: simple fade-in
+    inView('footer', () => {
+      animate('.footer-inner', { opacity: 1, y: 0 }, { duration: 0.5, easing: 'ease-out' });
+    }, { amount: 0.15 });
+  }
+</script>
+
+</body>
+</html>
