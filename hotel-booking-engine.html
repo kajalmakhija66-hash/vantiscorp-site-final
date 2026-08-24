@@ -1,0 +1,2327 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Hotel Booking Engine — VantisCorp</title>
+<link rel="icon" href="assets/favicon.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=Inter:wght@400;500;600&family=IBM+Plex+Mono:wght@500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --accent: #17CC90;
+    --accent-dark: #10a374;
+    --ink: #0E1420;
+    --ink-soft: #4B5565;
+    --line: #E6E9ED;
+    --bg: #FFFFFF;
+    --bg-subtle: #F7F9FA;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    font-family: 'Inter', sans-serif;
+    color: var(--ink);
+    background: var(--bg);
+    -webkit-font-smoothing: antialiased;
+    overflow-x: hidden;
+  }
+
+  h1, h2, h3 {
+    font-family: 'Space Grotesk', sans-serif;
+    color: var(--ink);
+    line-height: 1.15;
+  }
+
+  a { text-decoration: none; color: inherit; }
+
+  .wrap {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 32px;
+  }
+
+  /* ---------- Header ---------- */
+  header {
+    position: sticky;
+    top: 0;
+    z-index: 50;
+    background: rgba(255,255,255,0.85);
+    backdrop-filter: saturate(180%) blur(12px);
+    border-bottom: 1px solid var(--line);
+  }
+
+  .nav {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    height: 76px;
+  }
+
+  .nav img {
+    height: 40px;
+    display: block;
+  }
+
+  .nav-links {
+    display: flex;
+    align-items: center;
+    gap: 40px;
+  }
+
+  .nav-links a {
+    font-size: 14.5px;
+    font-weight: 500;
+    color: var(--ink-soft);
+    transition: color 0.2s ease;
+  }
+
+  .nav-links a:hover { color: var(--ink); }
+
+  .nav-cta {
+    display: inline-flex;
+    align-items: center;
+    padding: 10px 20px;
+    border-radius: 8px;
+    background: var(--accent);
+    color: var(--ink) !important;
+    font-size: 14px;
+    font-weight: 600;
+    transition: background 0.2s ease;
+  }
+
+  .nav-cta:hover { background: var(--accent-dark); }
+
+  @media (max-width: 860px) {
+    .nav-links a:not(.nav-cta) { display: none; }
+    .nav-links { gap: 16px; }
+  }
+
+  /* ---------- Buttons (shared) ---------- */
+  .btn-primary {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 14px 22px;
+    border-radius: 8px;
+    background: var(--accent);
+    color: var(--ink);
+    font-size: 14.5px;
+    font-weight: 600;
+    box-shadow: 0 1px 2px rgba(14,20,32,0.04), 0 0 0 0 rgba(23,204,144,0);
+    transition: transform 0.2s ease, box-shadow 0.2s ease, background 0.2s ease;
+  }
+
+  .btn-primary svg { color: var(--ink); transition: transform 0.2s ease; }
+
+  .btn-primary:hover {
+    background: var(--accent-dark);
+    transform: translateY(-1px);
+    box-shadow: 0 10px 24px -4px rgba(23,204,144,0.55), 0 0 0 4px rgba(23,204,144,0.22);
+  }
+
+  .btn-primary:hover svg { transform: translateX(2px); }
+
+  .btn-secondary {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 14.5px;
+    font-weight: 600;
+    color: var(--ink);
+    padding: 14px 2px;
+    position: relative;
+  }
+
+  .btn-secondary::after {
+    content: "";
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: 11px;
+    height: 1.5px;
+    background: var(--accent);
+    transform: scaleX(0.0);
+    transform-origin: left;
+    transition: transform 0.25s ease;
+  }
+
+  .btn-secondary:hover::after { transform: scaleX(1); }
+
+  /* ---------- Hero: dark technical composition ---------- */
+  .hbe-hero {
+    position: relative;
+    padding: 100px 0 0;
+    min-height: 680px;
+    background: linear-gradient(165deg, #F6FAF8 0%, #EFF6F2 48%, #E8F1EC 100%);
+    overflow: hidden;
+    isolation: isolate;
+    display: flex;
+    align-items: center;
+  }
+
+  /* Soft edge vignette — frames the composition, adds depth without darkening the whole hero */
+  .hbe-hero::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    z-index: 0;
+    background: radial-gradient(ellipse 90% 80% at 50% 40%, transparent 55%, rgba(14,26,22,0.05) 100%);
+    pointer-events: none;
+  }
+
+  /* Fine animated grid — the ambient "something is happening" layer */
+  .hbe-grid {
+    position: absolute;
+    inset: -2px;
+    z-index: 0;
+    background-image:
+      linear-gradient(rgba(14,26,22,0.09) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(14,26,22,0.09) 1px, transparent 1px);
+    background-size: 56px 56px;
+    -webkit-mask-image: radial-gradient(ellipse 78% 68% at 32% 40%, rgba(0,0,0,0.95) 0%, rgba(0,0,0,0.45) 60%, transparent 88%);
+    mask-image: radial-gradient(ellipse 78% 68% at 32% 40%, rgba(0,0,0,0.95) 0%, rgba(0,0,0,0.45) 60%, transparent 88%);
+    animation: gridDrift 60s linear infinite;
+  }
+
+  @keyframes gridDrift {
+    0%   { background-position: 0 0; }
+    100% { background-position: 56px 112px; }
+  }
+
+  /* Restrained green glow — an accent, not a wash */
+  .hbe-glow {
+    position: absolute;
+    top: -220px;
+    left: -120px;
+    width: 620px;
+    height: 620px;
+    border-radius: 50%;
+    background: radial-gradient(circle at center, rgba(23,204,144,0.26), rgba(23,204,144,0) 68%);
+    z-index: 0;
+    animation: glowBreathe 13s ease-in-out infinite;
+    pointer-events: none;
+  }
+
+  @keyframes glowBreathe {
+    0%, 100% { opacity: 0.65; transform: scale(1) translate(0, 0); }
+    50% { opacity: 1; transform: scale(1.08) translate(2%, 3%); }
+  }
+
+  /* Counterbalancing soft shadow blob — gives the composition weight/depth,
+     the way the dark version's black corners did, without darkening the whole hero */
+  .hbe-shadow-blob {
+    position: absolute;
+    bottom: -260px;
+    right: -140px;
+    width: 560px;
+    height: 560px;
+    border-radius: 50%;
+    background: radial-gradient(circle at center, rgba(14,26,22,0.09), rgba(14,26,22,0) 70%);
+    z-index: 0;
+    animation: shadowBreathe 15s ease-in-out infinite;
+    animation-delay: -6s;
+    pointer-events: none;
+  }
+
+  @keyframes shadowBreathe {
+    0%, 100% { opacity: 0.6; transform: scale(1) translate(0, 0); }
+    50% { opacity: 1; transform: scale(1.06) translate(-2%, -3%); }
+  }
+
+  /* Sparse floating points — quiet texture, not decoration overload */
+  .hbe-particle {
+    position: absolute;
+    width: 3px;
+    height: 3px;
+    border-radius: 50%;
+    background: rgba(23,204,144,0.55);
+    z-index: 0;
+    animation: particleFloat 9s ease-in-out infinite;
+  }
+
+  .hbe-particle:nth-child(1) { top: 22%; left: 58%; animation-duration: 10s; }
+  .hbe-particle:nth-child(2) { top: 68%; left: 46%; animation-duration: 12.5s; animation-delay: -3s; opacity: 0.6; }
+  .hbe-particle:nth-child(3) { top: 40%; left: 66%; animation-duration: 8.5s; animation-delay: -5s; opacity: 0.4; }
+
+  @keyframes particleFloat {
+    0%, 100% { transform: translate(0, 0); opacity: 0.5; }
+    50% { transform: translate(-10px, -16px); opacity: 1; }
+  }
+
+  .hbe-hero .wrap {
+    position: relative;
+    z-index: 2;
+    width: 100%;
+  }
+
+  .hbe-hero-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    padding-bottom: 100px;
+  }
+
+  .hbe-hero-copy {
+    max-width: 560px;
+  }
+
+  .hbe-eyebrow {
+    display: inline-flex;
+    align-items: center;
+    gap: 9px;
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 12px;
+    font-weight: 500;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--ink-soft);
+    opacity: 0;
+    transform: translateY(12px);
+  }
+
+  .hbe-eyebrow::before {
+    content: "";
+    width: 16px;
+    height: 1.5px;
+    background: var(--accent);
+    flex-shrink: 0;
+  }
+
+  .hbe-hero h1 {
+    margin-top: 20px;
+    font-size: clamp(32px, 4vw, 48px);
+    font-weight: 600;
+    letter-spacing: -0.02em;
+    color: #0E1A16;
+    opacity: 0;
+    transform: translateY(16px);
+  }
+
+  .hbe-hero-sub {
+    margin-top: 18px;
+    max-width: 480px;
+    font-size: 16.5px;
+    line-height: 1.6;
+    color: var(--ink-soft);
+    opacity: 0;
+    transform: translateY(16px);
+  }
+
+  .hbe-hero-ctas {
+    display: flex;
+    align-items: center;
+    gap: 26px;
+    margin-top: 34px;
+    flex-wrap: wrap;
+    opacity: 0;
+    transform: translateY(16px);
+  }
+
+  /* Product visual — asymmetric, bleeding off the right edge, layered into the glow */
+  .hbe-visual {
+    position: absolute;
+    top: 50%;
+    right: -70px;
+    width: 480px;
+    transform: translateY(-46%) rotate(-3deg);
+    z-index: 1;
+    opacity: 0;
+  }
+
+  .hbe-visual-panel {
+    aspect-ratio: 4 / 3.1;
+    border-radius: 16px;
+    background: linear-gradient(150deg, rgba(255,255,255,0.94) 0%, rgba(243,247,245,0.75) 100%);
+    border: 1px solid rgba(14,26,22,0.13);
+    box-shadow: 0 50px 100px -22px rgba(14,26,22,0.32), 0 10px 30px -10px rgba(14,26,22,0.14), 0 0 0 1px rgba(23,204,144,0.10) inset;
+    backdrop-filter: blur(2px);
+    position: relative;
+    overflow: hidden;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .hbe-visual-panel::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background-image:
+      linear-gradient(rgba(14,26,22,0.05) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(14,26,22,0.05) 1px, transparent 1px);
+    background-size: 28px 28px;
+  }
+
+  .hbe-visual-panel::after {
+    content: "";
+    position: absolute;
+    top: -30%;
+    left: -20%;
+    width: 70%;
+    height: 70%;
+    background: radial-gradient(circle at center, rgba(23,204,144,0.20), transparent 70%);
+    pointer-events: none;
+  }
+
+  .hbe-visual-label {
+    position: relative;
+    z-index: 1;
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: #A6AEB9;
+    text-align: center;
+    padding: 0 30px;
+  }
+
+  .hbe-visual-tag {
+    position: absolute;
+    top: -13px;
+    left: 28px;
+    z-index: 2;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    background: #FAFBFA;
+    padding: 4px 10px;
+    border-radius: 20px;
+    border: 1px solid var(--line);
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+    color: var(--ink-soft);
+  }
+
+  .hbe-visual-tag-dot {
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: var(--accent);
+    box-shadow: 0 0 8px 1px rgba(23,204,144,0.7);
+  }
+
+  @media (max-width: 1180px) {
+    .hbe-visual { right: -120px; opacity: 0.6 !important; }
+  }
+
+  @media (max-width: 980px) {
+    .hbe-hero { padding: 88px 0 64px; min-height: 0; display: block; }
+    .hbe-hero-grid { padding-bottom: 0; }
+    .hbe-visual {
+      position: relative;
+      width: 100%;
+      max-width: 420px;
+      margin: 44px auto 0;
+      transform: none;
+      right: auto; top: auto;
+    }
+  }
+
+  @media (max-width: 640px) {
+    .hbe-hero h1 { font-size: 28px; }
+    .hbe-hero-ctas { gap: 14px 22px; }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .hbe-grid, .hbe-glow, .hbe-shadow-blob, .hbe-particle { animation: none !important; }
+    .hbe-eyebrow, .hbe-hero h1, .hbe-hero-sub, .hbe-hero-ctas {
+      opacity: 1 !important;
+      transform: none !important;
+    }
+    .hbe-visual { opacity: 1 !important; }
+  }
+
+  /* ---------- Section 2: Why hotel booking still eats time (homepage pattern) ---------- */
+  .hbe-problem {
+    padding: 72px 0 76px;
+    background: var(--bg-subtle);
+  }
+
+  .hbe-problem-copy {
+    max-width: 620px;
+    margin: 0 auto;
+    text-align: center;
+    opacity: 0;
+    transform: translateY(16px);
+  }
+
+  .hbe-problem-copy h2 {
+    font-size: 34px;
+    font-weight: 600;
+    letter-spacing: -0.015em;
+  }
+
+  .hbe-problem-copy p {
+    margin-top: 16px;
+    font-size: 16.5px;
+    line-height: 1.6;
+    color: var(--ink-soft);
+  }
+
+  /* Video block — same pattern as the homepage's solution-video */
+  .hbe-solution-video {
+    margin-top: 56px;
+    text-align: center;
+  }
+
+  .hbe-video-title {
+    font-size: 24px;
+    font-weight: 600;
+    letter-spacing: -0.01em;
+    opacity: 0;
+    transform: translateY(12px);
+  }
+
+  .hbe-video-frame {
+    position: relative;
+    max-width: 760px;
+    margin: 32px auto 0;
+    border-radius: 16px;
+    overflow: hidden;
+    opacity: 0;
+    transform: scale(0.96);
+    box-shadow:
+      0 2px 6px rgba(14,20,32,0.05),
+      0 40px 80px -24px rgba(14,20,32,0.28);
+  }
+
+  .hbe-video-placeholder {
+    aspect-ratio: 16 / 9;
+    width: 100%;
+    position: relative;
+    background:
+      radial-gradient(circle at 30% 25%, rgba(23,204,144,0.20), transparent 55%),
+      linear-gradient(150deg, #0E1420 0%, #131B27 55%, #0A0F17 100%);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .hbe-video-placeholder::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background-image:
+      linear-gradient(rgba(255,255,255,0.035) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(255,255,255,0.035) 1px, transparent 1px);
+    background-size: 36px 36px;
+  }
+
+  .hbe-video-caption {
+    position: absolute;
+    left: 24px;
+    bottom: 20px;
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+    color: rgba(255,255,255,0.45);
+  }
+
+  .hbe-play-button {
+    position: relative;
+    width: 76px;
+    height: 76px;
+    border-radius: 50%;
+    background: var(--accent);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: none;
+    cursor: pointer;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    box-shadow: 0 0 0 0 rgba(23,204,144,0.35);
+  }
+
+  .hbe-play-button svg { color: var(--ink); margin-left: 3px; }
+
+  .hbe-play-button:hover {
+    transform: scale(1.05);
+    box-shadow: 0 0 0 16px rgba(23,204,144,0.14), 0 12px 30px -6px rgba(23,204,144,0.55);
+  }
+
+  @media (max-width: 640px) {
+    .hbe-problem { padding: 64px 0 68px; }
+    .hbe-problem-copy h2 { font-size: 27px; }
+    .hbe-solution-video { margin-top: 40px; }
+    .hbe-video-title { font-size: 19px; }
+    .hbe-play-button { width: 60px; height: 60px; }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .hbe-problem-copy {
+      opacity: 1 !important;
+      transform: none !important;
+    }
+    .hbe-video-title, .hbe-video-frame {
+      opacity: 1 !important;
+      transform: none !important;
+    }
+  }
+
+  /* ---------- Section 3: What Our Hotel Booking Engine Does (editorial alternating rows) ---------- */
+  .hbe-features {
+    position: relative;
+    padding: 72px 0 24px;
+    background: linear-gradient(160deg, #FBFBFB 0%, #F6F7F7 55%, #F1F2F2 100%);
+    overflow: hidden;
+    isolation: isolate;
+  }
+
+  /* Soft dot grid instead of a square line grid */
+  .hbe-features-grid {
+    position: absolute;
+    inset: -2px;
+    z-index: 0;
+    background-image: radial-gradient(rgba(14,26,22,0.12) 1px, transparent 1.5px);
+    background-size: 28px 28px;
+    -webkit-mask-image: linear-gradient(180deg, rgba(0,0,0,0.75) 0%, rgba(0,0,0,0.3) 50%, rgba(0,0,0,0.75) 100%);
+    mask-image: linear-gradient(180deg, rgba(0,0,0,0.75) 0%, rgba(0,0,0,0.3) 50%, rgba(0,0,0,0.75) 100%);
+    animation: gridDrift 60s linear infinite;
+  }
+
+  /* Organic blob — irregular border-radius instead of a circle, so the glow
+  /* A soft hexagon instead of a circle/blob — clipped to a polygon, then
+     blurred so the edges stay gentle rather than graphic */
+  .hbe-features-glow {
+    position: absolute;
+    top: 4%;
+    right: -200px;
+    width: 560px;
+    height: 520px;
+    border-radius: 50%;
+    background: radial-gradient(circle at 42% 42%, rgba(23,204,144,0.28), rgba(23,204,144,0) 70%);
+    z-index: 0;
+    animation: glowBreathe 14s ease-in-out infinite;
+    pointer-events: none;
+  }
+
+  /* An elongated soft capsule/pill for the counterbalance shape */
+  .hbe-features-glow--two {
+    top: auto;
+    bottom: 4%;
+    right: auto;
+    left: -180px;
+    width: 480px;
+    height: 220px;
+    border-radius: 200px;
+    clip-path: none;
+    transform: rotate(-10deg);
+    filter: blur(38px);
+    background: radial-gradient(ellipse at 55% 50%, rgba(14,26,22,0.12), rgba(14,26,22,0) 72%);
+    animation: shadowBreathe 16s ease-in-out infinite;
+    animation-delay: -5s;
+  }
+
+  /* A small crosshair / registration mark — thin straight lines, the most
+     angular, technical-feeling shape of the three */
+  /* A breathing, soft-filled triangle — the third distinct silhouette */
+  .hbe-features-diamond {
+    position: absolute;
+    top: 32%;
+    right: 6%;
+    width: 220px;
+    height: 220px;
+    clip-path: polygon(50% 6%, 6% 94%, 94% 94%);
+    background: linear-gradient(160deg, rgba(23,204,144,0.22), rgba(23,204,144,0) 75%);
+    filter: blur(18px);
+    z-index: 1;
+    pointer-events: none;
+    animation: triangleBreathe 12s ease-in-out infinite;
+    animation-delay: -2s;
+  }
+
+  @keyframes triangleBreathe {
+    0%, 100% { opacity: 0.7; transform: scale(1) rotate(0deg); }
+    50% { opacity: 1; transform: scale(1.07) rotate(4deg); }
+  }
+
+  .hbe-features .wrap {
+    position: relative;
+    z-index: 1;
+  }
+
+  .hbe-features-head {
+    max-width: 640px;
+  }
+
+  .hbe-features-eyebrow {
+    display: flex;
+    align-items: center;
+    gap: 9px;
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 12px;
+    font-weight: 500;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--ink-soft);
+    opacity: 0;
+    transform: translateY(12px);
+  }
+
+  .hbe-features-eyebrow::before {
+    content: "";
+    width: 16px;
+    height: 1.5px;
+    background: var(--accent);
+    flex-shrink: 0;
+  }
+
+  .hbe-features-head h2 {
+    margin-top: 14px;
+    font-size: clamp(28px, 3.4vw, 38px);
+    font-weight: 600;
+    letter-spacing: -0.015em;
+    opacity: 0;
+    transform: translateY(16px);
+  }
+
+  .hbe-feature-row {
+    display: flex;
+    align-items: center;
+    gap: 56px;
+    padding: 40px 0;
+  }
+
+  .hbe-feature-row--reverse {
+    flex-direction: row-reverse;
+  }
+
+  .hbe-feature-text {
+    flex: 1;
+    max-width: 440px;
+  }
+
+
+  .hbe-feature-text h3 {
+    margin-top: 0;
+    font-size: clamp(22px, 2.4vw, 27px);
+    font-weight: 600;
+    letter-spacing: -0.01em;
+  }
+
+  .hbe-feature-text p {
+    margin-top: 10px;
+    font-size: 15.5px;
+    line-height: 1.55;
+    color: var(--ink-soft);
+  }
+
+  .hbe-feature-visual {
+    flex: 1;
+    opacity: 0;
+    transform: scale(0.96);
+  }
+
+  .hbe-feature-visual-frame {
+    aspect-ratio: 16 / 11;
+    width: 100%;
+    max-width: 420px;
+    margin: 0 auto;
+    border-radius: 16px;
+    background: linear-gradient(150deg, rgba(255,255,255,0.75) 0%, rgba(243,247,245,0.55) 100%);
+    border: 1px solid var(--line);
+    position: relative;
+    overflow: hidden;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 30px 60px -28px rgba(14,26,22,0.16);
+    backdrop-filter: blur(1px);
+  }
+
+  .hbe-feature-visual-frame::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background-image: radial-gradient(rgba(14,26,22,0.10) 1px, transparent 1.5px);
+    background-size: 22px 22px;
+  }
+
+  .hbe-feature-visual-frame::after {
+    content: "";
+    position: absolute;
+    top: -25%;
+    left: -15%;
+    width: 60%;
+    height: 60%;
+    background: radial-gradient(circle at center, rgba(23,204,144,0.16), transparent 70%);
+    pointer-events: none;
+  }
+
+  .hbe-feature-visual-label {
+    position: relative;
+    z-index: 1;
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+    color: #A6AEB9;
+    text-align: center;
+    padding: 0 28px;
+  }
+
+  /* text/visual entrance direction alternates with the row, so both always
+     travel "inward" toward the center line rather than always left-to-right */
+  .hbe-feature-row .hbe-feature-text { opacity: 0; transform: translateX(-24px); }
+  .hbe-feature-row--reverse .hbe-feature-text { transform: translateX(24px); }
+
+  @media (max-width: 900px) {
+    .hbe-feature-row, .hbe-feature-row--reverse {
+      flex-direction: column;
+      gap: 24px;
+      padding: 32px 0;
+    }
+    .hbe-feature-text { max-width: 100%; }
+    .hbe-feature-visual-frame { max-width: 360px; }
+    .hbe-feature-row .hbe-feature-text,
+    .hbe-feature-row--reverse .hbe-feature-text {
+      transform: translateY(16px);
+    }
+  }
+
+  @media (max-width: 640px) {
+    .hbe-features { padding: 48px 0 16px; }
+    .hbe-feature-row, .hbe-feature-row--reverse { padding: 24px 0; gap: 20px; }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .hbe-features-eyebrow, .hbe-features-head h2, .hbe-feature-text, .hbe-feature-visual {
+      opacity: 1 !important;
+      transform: none !important;
+    }
+    .hbe-features-grid, .hbe-features-glow, .hbe-features-glow--two, .hbe-features-diamond { animation: none !important; }
+  }
+
+  /* ---------- Section 4: Fits the Stack You Already Run (scroll-scrubbed system map) ---------- */
+  .hbe-map {
+    padding: 96px 0 108px;
+    background: var(--bg);
+  }
+
+  .hbe-map-head {
+    max-width: 640px;
+    opacity: 0;
+    transform: translateY(16px);
+  }
+
+  .hbe-map-eyebrow {
+    display: flex;
+    align-items: center;
+    gap: 9px;
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 12px;
+    font-weight: 500;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--ink-soft);
+  }
+
+  .hbe-map-eyebrow::before {
+    content: "";
+    width: 16px;
+    height: 1.5px;
+    background: var(--accent);
+    flex-shrink: 0;
+  }
+
+  .hbe-map-head h2 {
+    margin-top: 14px;
+    font-size: clamp(28px, 3.4vw, 38px);
+    font-weight: 600;
+    letter-spacing: -0.015em;
+  }
+
+  .hbe-map-head p {
+    margin-top: 14px;
+    font-size: 16px;
+    line-height: 1.6;
+    color: var(--ink-soft);
+  }
+
+  .hbe-map-diagram {
+    position: relative;
+    width: 100%;
+    max-width: 1000px;
+    aspect-ratio: 1000 / 300;
+    margin: 72px auto 0;
+  }
+
+  .hbe-map-svg {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    overflow: visible;
+  }
+
+  .hbe-map-path {
+    fill: none;
+    stroke: var(--line);
+    stroke-width: 2;
+    stroke-linecap: round;
+  }
+
+  .hbe-map-dot {
+    fill: var(--accent);
+    opacity: 0;
+    filter: drop-shadow(0 0 4px rgba(23,204,144,0.7));
+  }
+
+  .hbe-map-node {
+    position: absolute;
+    transform: translate(-50%, -50%);
+    background: #fff;
+    border: 1.5px solid var(--line);
+    border-radius: 12px;
+    padding: 14px 16px;
+    text-align: center;
+    box-shadow: 0 8px 20px -10px rgba(14,26,22,0.10);
+  }
+
+  .hbe-map-node-label {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 10.5px;
+    font-weight: 500;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+    color: var(--ink-soft);
+  }
+
+  .hbe-map-node--input { left: 9%; width: 15%; }
+
+  .hbe-map-node--output { left: 91%; width: 17%; }
+
+  .hbe-map-node--center {
+    left: 50%;
+    top: 50%;
+    width: 21%;
+    padding: 20px 18px;
+    border-radius: 14px;
+    z-index: 1;
+  }
+
+  .hbe-map-node--center .hbe-map-node-label {
+    font-family: 'Space Grotesk', sans-serif;
+    font-size: 15px;
+    font-weight: 600;
+    letter-spacing: -0.005em;
+    text-transform: none;
+  }
+
+  .hbe-map-node--center .hbe-map-node-tag {
+    margin-top: 5px;
+    display: block;
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 9.5px;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: var(--accent-dark);
+  }
+
+  @media (max-width: 780px) {
+    .hbe-map-diagram { display: none; }
+    .hbe-map-fallback { display: flex; }
+  }
+
+  .hbe-map-fallback {
+    display: none;
+    margin-top: 48px;
+    flex-direction: column;
+    align-items: center;
+    gap: 14px;
+    text-align: center;
+  }
+
+  .hbe-map-fallback-row {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    flex-wrap: wrap;
+    justify-content: center;
+  }
+
+  .hbe-map-fallback .hbe-map-node-label {
+    background: #fff;
+    border: 1.5px solid var(--line);
+    border-radius: 10px;
+    padding: 10px 14px;
+  }
+
+  .hbe-map-fallback-arrow {
+    color: var(--accent);
+    font-family: 'IBM Plex Mono', monospace;
+  }
+
+  @media (max-width: 640px) {
+    .hbe-map { padding: 64px 0 68px; }
+    .hbe-map-diagram { margin-top: 0; }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .hbe-map-head { opacity: 1 !important; transform: none !important; }
+  }
+
+  /* ---------- Section 5: Testimonial (same treatment as the homepage) ---------- */
+  .hbe-testimonial {
+    padding: 84px 0 92px;
+    background: #EBF3EF;
+  }
+
+  .hbe-testimonial-head {
+    text-align: center;
+    max-width: 560px;
+    margin: 0 auto 52px;
+  }
+
+  .hbe-testimonial-eyebrow {
+    display: inline-flex;
+    align-items: center;
+    gap: 9px;
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 12px;
+    font-weight: 500;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--ink-soft);
+    opacity: 0;
+    transform: translateY(12px);
+  }
+
+  .hbe-testimonial-eyebrow::before {
+    content: "";
+    width: 16px;
+    height: 1.5px;
+    background: var(--accent);
+    flex-shrink: 0;
+  }
+
+  .hbe-testimonial-title {
+    margin-top: 14px;
+    font-size: 32px;
+    font-weight: 600;
+    letter-spacing: -0.015em;
+    opacity: 0;
+    transform: translateY(14px);
+  }
+
+  .hbe-testimonial-inner {
+    max-width: 760px;
+    margin: 0 auto;
+    display: flex;
+    gap: 28px;
+  }
+
+  .hbe-testimonial-mark {
+    flex-shrink: 0;
+    width: 2px;
+    background: var(--accent);
+    border-radius: 2px;
+    opacity: 0;
+    transform: scaleY(0);
+    transform-origin: top;
+  }
+
+  .hbe-testimonial-body { flex: 1; }
+
+  .hbe-testimonial-quote-icon {
+    color: var(--accent);
+    opacity: 0;
+    transform: translateY(10px);
+  }
+
+  .hbe-testimonial-quote {
+    margin-top: 18px;
+    font-size: 27px;
+    font-weight: 500;
+    line-height: 1.5;
+    letter-spacing: -0.01em;
+    color: var(--ink);
+    opacity: 0;
+    transform: translateY(16px);
+  }
+
+  .hbe-testimonial-attribution {
+    margin-top: 28px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    opacity: 0;
+    transform: translateY(16px);
+  }
+
+  .hbe-testimonial-avatar {
+    width: 38px;
+    height: 38px;
+    border-radius: 50%;
+    background: rgba(23,204,144,0.12);
+    color: var(--accent-dark);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: 'Space Grotesk', sans-serif;
+    font-size: 14px;
+    font-weight: 600;
+    flex-shrink: 0;
+  }
+
+  .hbe-testimonial-attribution-text {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 12px;
+    letter-spacing: 0.03em;
+    color: var(--ink-soft);
+  }
+
+  .hbe-testimonial-attribution-text strong {
+    display: block;
+    font-family: 'Inter', sans-serif;
+    font-size: 14px;
+    font-weight: 600;
+    letter-spacing: normal;
+    color: var(--ink);
+    margin-bottom: 2px;
+  }
+
+  @media (max-width: 640px) {
+    .hbe-testimonial { padding: 76px 0 84px; }
+    .hbe-testimonial-inner { gap: 18px; }
+    .hbe-testimonial-quote { font-size: 21px; }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .hbe-testimonial-eyebrow, .hbe-testimonial-title, .hbe-testimonial-mark, .hbe-testimonial-quote-icon, .hbe-testimonial-quote, .hbe-testimonial-attribution {
+      opacity: 1 !important;
+      transform: none !important;
+    }
+  }
+
+  /* ---------- Section 7: Cross-links (navigation-oriented, but with real presence) ---------- */
+  .hbe-crosslinks {
+    position: relative;
+    padding: 88px 0 96px;
+    background: linear-gradient(175deg, #FAFBFB 0%, #F4F7F6 100%);
+    border-top: 1px solid var(--line);
+    overflow: hidden;
+  }
+
+  .hbe-crosslinks::before {
+    content: "";
+    position: absolute;
+    top: -180px;
+    right: -160px;
+    width: 480px;
+    height: 480px;
+    border-radius: 50%;
+    background: radial-gradient(circle at center, rgba(23,204,144,0.12), rgba(23,204,144,0) 70%);
+    pointer-events: none;
+  }
+
+  .hbe-crosslinks-head {
+    position: relative;
+    max-width: 640px;
+    opacity: 0;
+    transform: translateY(14px);
+  }
+
+  .hbe-crosslinks-eyebrow {
+    display: flex;
+    align-items: center;
+    gap: 9px;
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 12px;
+    font-weight: 500;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--ink-soft);
+  }
+
+  .hbe-crosslinks-eyebrow::before {
+    content: "";
+    width: 16px;
+    height: 1.5px;
+    background: var(--accent);
+    flex-shrink: 0;
+  }
+
+  .hbe-crosslinks-head h2 {
+    margin-top: 12px;
+    font-size: clamp(24px, 2.8vw, 30px);
+    font-weight: 600;
+    letter-spacing: -0.015em;
+  }
+
+  .hbe-crosslinks-grid {
+    position: relative;
+    margin-top: 40px;
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 18px;
+  }
+
+  .hbe-crosslink {
+    background: #fff;
+    border: 1px solid var(--line);
+    border-radius: 14px;
+    padding: 24px 22px;
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    opacity: 0;
+    transform: translateY(14px);
+    transition: transform 0.3s ease, box-shadow 0.3s ease, border-color 0.3s ease;
+  }
+
+  .hbe-crosslink:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 20px 36px -18px rgba(14,26,22,0.16);
+    border-color: #D7DEE3;
+  }
+
+  .hbe-crosslink-icon {
+    width: 34px;
+    height: 34px;
+    border-radius: 9px;
+    background: rgba(23,204,144,0.10);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--accent-dark);
+    flex-shrink: 0;
+    margin-bottom: 12px;
+  }
+
+  .hbe-crosslink-title {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 8px;
+    font-family: 'Space Grotesk', sans-serif;
+    font-size: 15.5px;
+    font-weight: 600;
+    letter-spacing: -0.005em;
+    color: var(--ink);
+  }
+
+  .hbe-crosslink-title svg {
+    color: var(--accent);
+    flex-shrink: 0;
+    transition: transform 0.2s ease;
+  }
+
+  .hbe-crosslink:hover .hbe-crosslink-title svg { transform: translateX(2px); }
+
+  .hbe-crosslink p {
+    margin-top: 2px;
+    font-size: 13.5px;
+    line-height: 1.5;
+    color: var(--ink-soft);
+  }
+
+  @media (max-width: 780px) {
+    .hbe-crosslinks-grid { grid-template-columns: repeat(2, 1fr); }
+  }
+
+  @media (max-width: 480px) {
+    .hbe-crosslinks-grid { grid-template-columns: 1fr; }
+  }
+
+  @media (max-width: 640px) {
+    .hbe-crosslinks { padding: 60px 0 64px; }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .hbe-crosslinks-head, .hbe-crosslink {
+      opacity: 1 !important;
+      transform: none !important;
+    }
+  }
+
+  /* ---------- Section 8: FAQ accordion ---------- */
+  .hbe-faq {
+    padding: 96px 0 104px;
+    background: var(--bg);
+  }
+
+  .hbe-faq-head {
+    max-width: 620px;
+    opacity: 0;
+    transform: translateY(14px);
+  }
+
+  .hbe-faq-eyebrow {
+    display: flex;
+    align-items: center;
+    gap: 9px;
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 12px;
+    font-weight: 500;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--ink-soft);
+  }
+
+  .hbe-faq-eyebrow::before {
+    content: "";
+    width: 16px;
+    height: 1.5px;
+    background: var(--accent);
+    flex-shrink: 0;
+  }
+
+  .hbe-faq-head h2 {
+    margin-top: 14px;
+    font-size: clamp(26px, 3vw, 34px);
+    font-weight: 600;
+    letter-spacing: -0.015em;
+  }
+
+  .hbe-faq-list {
+    margin-top: 40px;
+    max-width: 760px;
+    border-top: 1px solid var(--line);
+  }
+
+  .hbe-faq-item {
+    border-bottom: 1px solid var(--line);
+    opacity: 0;
+    transform: translateY(14px);
+  }
+
+  .hbe-faq-question {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 20px;
+    padding: 22px 2px;
+    background: none;
+    border: none;
+    cursor: pointer;
+    text-align: left;
+    font-family: 'Space Grotesk', sans-serif;
+    font-size: 17px;
+    font-weight: 600;
+    color: var(--ink);
+    letter-spacing: -0.005em;
+  }
+
+  .hbe-faq-icon {
+    position: relative;
+    flex-shrink: 0;
+    width: 22px;
+    height: 22px;
+    border-radius: 50%;
+    border: 1.5px solid var(--line);
+    transition: border-color 0.25s ease, background 0.25s ease;
+  }
+
+  .hbe-faq-icon::before,
+  .hbe-faq-icon::after {
+    content: "";
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    background: var(--ink-soft);
+    transition: transform 0.3s ease, background 0.25s ease;
+  }
+
+  .hbe-faq-icon::before { width: 8px; height: 1.3px; transform: translate(-50%, -50%); }
+  .hbe-faq-icon::after { width: 1.3px; height: 8px; transform: translate(-50%, -50%); }
+
+  .hbe-faq-item.is-open .hbe-faq-icon {
+    border-color: var(--accent);
+    background: rgba(23,204,144,0.10);
+  }
+
+  .hbe-faq-item.is-open .hbe-faq-icon::after { transform: translate(-50%, -50%) rotate(90deg); opacity: 0; }
+  .hbe-faq-item.is-open .hbe-faq-icon::before,
+  .hbe-faq-item.is-open .hbe-faq-icon::after { background: var(--accent-dark); }
+
+  .hbe-faq-answer {
+    overflow: hidden;
+    height: 0;
+  }
+
+  .hbe-faq-answer p {
+    padding: 0 2px 22px;
+    max-width: 620px;
+    font-size: 15px;
+    line-height: 1.6;
+    color: var(--ink-soft);
+  }
+
+  @media (max-width: 640px) {
+    .hbe-faq { padding: 64px 0 68px; }
+    .hbe-faq-list { margin-top: 28px; }
+    .hbe-faq-question { font-size: 15.5px; padding: 18px 2px; }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .hbe-faq-head, .hbe-faq-item {
+      opacity: 1 !important;
+      transform: none !important;
+    }
+  }
+
+  /* ---------- Section 9: Demo booking CTA + Footer (same treatment as the homepage) ---------- */
+  .hbe-demo-cta {
+    padding: 80px 0 88px;
+    background: linear-gradient(175deg, #F3F9F6 0%, #EAF3EF 100%);
+  }
+
+  .hbe-demo-inner {
+    display: grid;
+    grid-template-columns: 0.85fr 1fr;
+    gap: 64px;
+    align-items: start;
+    opacity: 0;
+    transform: translateY(18px);
+  }
+
+  .hbe-demo-copy { max-width: 380px; }
+
+  .hbe-demo-eyebrow {
+    display: flex;
+    align-items: center;
+    gap: 9px;
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 12px;
+    font-weight: 500;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--ink-soft);
+  }
+
+  .hbe-demo-eyebrow::before {
+    content: "";
+    width: 16px;
+    height: 1.5px;
+    background: var(--accent);
+    flex-shrink: 0;
+  }
+
+  .hbe-demo-title {
+    margin-top: 16px;
+    font-size: 34px;
+    font-weight: 600;
+    letter-spacing: -0.015em;
+  }
+
+  .hbe-demo-sub {
+    margin-top: 14px;
+    font-size: 16px;
+    color: var(--ink-soft);
+  }
+
+  .hbe-demo-points {
+    margin-top: 36px;
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+  }
+
+  .hbe-demo-point {
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+    font-size: 14px;
+    color: var(--ink-soft);
+  }
+
+  .hbe-demo-point svg { flex-shrink: 0; margin-top: 2px; color: var(--accent-dark); }
+
+  .hbe-demo-form-card {
+    background: #fff;
+    border: 1px solid var(--line);
+    border-radius: 16px;
+    padding: 40px;
+    box-shadow: 0 30px 60px -30px rgba(14,20,32,0.16);
+  }
+
+  .hbe-demo-form-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 20px;
+    margin-top: 22px;
+  }
+
+  .hbe-demo-form-row:first-child { margin-top: 0; }
+
+  .hbe-demo-field {
+    display: flex;
+    flex-direction: column;
+  }
+
+  .hbe-demo-field label {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+    color: var(--ink-soft);
+    margin-bottom: 8px;
+  }
+
+  .hbe-demo-field input {
+    font-family: 'Inter', sans-serif;
+    font-size: 15px;
+    color: var(--ink);
+    background: transparent;
+    border: none;
+    border-bottom: 1.5px solid var(--line);
+    padding: 8px 2px;
+    transition: border-color 0.25s ease, box-shadow 0.25s ease;
+  }
+
+  .hbe-demo-field input::placeholder { color: #A6AEB9; }
+
+  .hbe-demo-field input:focus {
+    outline: none;
+    border-bottom-color: var(--accent);
+    box-shadow: 0 1px 0 0 var(--accent);
+  }
+
+  .hbe-demo-submit {
+    margin-top: 30px;
+    width: 100%;
+    justify-content: center;
+    border: none;
+    cursor: pointer;
+  }
+
+  .hbe-demo-form-note {
+    margin-top: 16px;
+    text-align: center;
+    font-size: 12px;
+    color: #A6AEB9;
+  }
+
+  @media (max-width: 860px) {
+    .hbe-demo-inner { grid-template-columns: 1fr; gap: 44px; }
+    .hbe-demo-copy { max-width: 100%; }
+  }
+
+  @media (max-width: 640px) {
+    .hbe-demo-cta { padding: 72px 0 80px; }
+    .hbe-demo-title { font-size: 26px; }
+    .hbe-demo-form-card { padding: 26px; }
+    .hbe-demo-form-row { grid-template-columns: 1fr; gap: 0; }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .hbe-demo-inner { opacity: 1 !important; transform: none !important; }
+  }
+
+  /* ---------- Footer ---------- */
+  footer {
+    background: var(--ink);
+    padding: 64px 0 32px;
+  }
+
+  .hbe-footer-inner {
+    display: grid;
+    grid-template-columns: 1.4fr 1fr 1fr;
+    gap: 40px;
+    opacity: 0;
+    transform: translateY(14px);
+  }
+
+  .hbe-footer-brand img { height: 32px; display: block; }
+
+  .hbe-footer-tagline {
+    margin-top: 16px;
+    max-width: 280px;
+    font-size: 14px;
+    line-height: 1.6;
+    color: rgba(255,255,255,0.5);
+  }
+
+  .hbe-footer-col-title {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: rgba(255,255,255,0.4);
+  }
+
+  .hbe-footer-links {
+    margin-top: 18px;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+  }
+
+  .hbe-footer-links a {
+    font-size: 14px;
+    color: rgba(255,255,255,0.72);
+    transition: color 0.2s ease;
+  }
+
+  .hbe-footer-links a:hover { color: #fff; }
+
+  .hbe-footer-bottom {
+    margin-top: 56px;
+    padding-top: 24px;
+    border-top: 1px solid rgba(255,255,255,0.10);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+    flex-wrap: wrap;
+  }
+
+  .hbe-footer-copyright {
+    font-size: 12.5px;
+    color: rgba(255,255,255,0.4);
+  }
+
+  .hbe-footer-legal {
+    display: flex;
+    gap: 24px;
+  }
+
+  .hbe-footer-legal a {
+    font-size: 12.5px;
+    color: rgba(255,255,255,0.4);
+    transition: color 0.2s ease;
+  }
+
+  .hbe-footer-legal a:hover { color: rgba(255,255,255,0.8); }
+
+  @media (max-width: 700px) {
+    .hbe-footer-inner { grid-template-columns: 1fr; gap: 32px; }
+    .hbe-footer-bottom { flex-direction: column; align-items: flex-start; }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .hbe-footer-inner { opacity: 1 !important; transform: none !important; }
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="wrap nav">
+    <a href="index.html" aria-label="VantisCorp home">
+      <img src="assets/logo-png.png" alt="VantisCorp logo">
+    </a>
+    <nav class="nav-links">
+      <a href="index.html#capabilities">Capabilities</a>
+      <a href="index.html#how-it-works">How It Works</a>
+      <a href="index.html#integrations">Integrations</a>
+      <a href="index.html#insights">Insights</a>
+      <a href="index.html#demo" class="nav-cta">Book a Demo</a>
+    </nav>
+  </div>
+</header>
+
+<section class="hbe-hero">
+  <div class="hbe-grid"></div>
+  <div class="hbe-glow"></div>
+  <div class="hbe-shadow-blob"></div>
+  <div class="hbe-particle"></div>
+  <div class="hbe-particle"></div>
+  <div class="hbe-particle"></div>
+
+  <div class="wrap">
+    <div class="hbe-hero-grid">
+      <div class="hbe-hero-copy">
+        <p class="hbe-eyebrow fade-up" data-delay="0.05">Hotel Booking Engine</p>
+
+        <h1 class="fade-up" data-delay="0.2">The hotel booking engine that runs under your brand, not ours.</h1>
+
+        <p class="hbe-hero-sub fade-up" data-delay="0.35">Corporate rates, budget limits, and policy checks built into search, running under your brand.</p>
+
+        <div class="hbe-hero-ctas fade-up" data-delay="0.5">
+          <a href="index.html#demo" class="btn-primary">
+            Book a Demo
+            <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+              <path d="M3.5 8H12.5M12.5 8L8.5 4M12.5 8L8.5 12" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+          </a>
+          <a href="index.html#how-it-works" class="btn-secondary">See How It Works</a>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="hbe-visual">
+    <span class="hbe-visual-tag"><span class="hbe-visual-tag-dot"></span>Live Preview</span>
+    <div class="hbe-visual-panel">
+      <p class="hbe-visual-label">Product visual goes here</p>
+    </div>
+  </div>
+</section>
+
+<section class="hbe-problem" id="problem">
+  <div class="wrap">
+    <div class="hbe-problem-copy">
+      <h2>Why Hotel Booking Still Eats Your Team's Time</h2>
+      <p>Your agents check rates across separate supplier screens before they even know if a hotel fits the client's budget. Negotiated rates live in a spreadsheet somewhere, not in the search itself. By the time a booking is confirmed, someone has already spent longer on it than the trip is worth.</p>
+    </div>
+
+    <div class="hbe-solution-video">
+      <h3 class="hbe-video-title">Here's how the Hotel Booking Engine fixes this.</h3>
+
+      <div class="hbe-video-frame">
+        <div class="hbe-video-placeholder">
+          <button class="hbe-play-button" aria-label="Play product video">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
+              <path d="M6 4.5L19 12L6 19.5V4.5Z" fill="currentColor"/>
+            </svg>
+          </button>
+          <span class="hbe-video-caption">Product walkthrough · 2:14</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="hbe-features" id="what-it-does">
+  <div class="hbe-features-grid"></div>
+  <div class="hbe-features-glow"></div>
+  <div class="hbe-features-glow hbe-features-glow--two"></div>
+  <div class="hbe-features-diamond"></div>
+
+  <div class="wrap">
+    <div class="hbe-features-head">
+      <p class="hbe-features-eyebrow">What It Does</p>
+      <h2>What Our Hotel Booking Engine Does</h2>
+    </div>
+
+    <div class="hbe-feature-row">
+      <div class="hbe-feature-text">
+        <h3>Negotiated Rates, Built Into Search</h3>
+        <p>Your client's negotiated hotel rates show up automatically, so agents stop hunting for the right contract.</p>
+      </div>
+      <div class="hbe-feature-visual">
+        <div class="hbe-feature-visual-frame">
+          <p class="hbe-feature-visual-label">Feature 1 visual: Negotiated rates in search</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="hbe-feature-row hbe-feature-row--reverse">
+      <div class="hbe-feature-text">
+        <h3>Budget Limits at the Point of Search</h3>
+        <p>Company travel budgets apply before a traveler even picks a hotel, not after finance flags it later.</p>
+      </div>
+      <div class="hbe-feature-visual">
+        <div class="hbe-feature-visual-frame">
+          <p class="hbe-feature-visual-label">Feature 2 visual: Budget limit applied at search</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="hbe-feature-row">
+      <div class="hbe-feature-text">
+        <h3>Your Brand, Not Ours</h3>
+        <p>Travelers book on a platform carrying your name and colors. Nobody sees Vantis.</p>
+      </div>
+      <div class="hbe-feature-visual">
+        <div class="hbe-feature-visual-frame">
+          <p class="hbe-feature-visual-label">Feature 3 visual: White-labeled booking flow</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="hbe-feature-row hbe-feature-row--reverse">
+      <div class="hbe-feature-text">
+        <h3>Extensive, Real Time Inventory</h3>
+        <p>Built on proven hotel infrastructure already trusted across the industry, so your team gets deep inventory without you having to source or maintain it yourself.</p>
+      </div>
+      <div class="hbe-feature-visual">
+        <div class="hbe-feature-visual-frame">
+          <p class="hbe-feature-visual-label">Feature 4 visual: Real-time inventory &amp; availability</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="hbe-map" id="fits-stack">
+  <div class="wrap">
+    <div class="hbe-map-head">
+      <p class="hbe-map-eyebrow">Fits Your Stack</p>
+      <h2>Fits the Stack You Already Run</h2>
+      <p>The Hotel Booking Engine connects to your existing OBT and GDS setup, and hands off directly into Mid Office Automation and Back Office Automation, so a booking made here doesn't need to be re-entered anywhere else.</p>
+    </div>
+
+    <div class="hbe-map-diagram">
+      <svg class="hbe-map-svg" viewBox="0 0 1000 300" preserveAspectRatio="none">
+        <path id="pathObt" class="hbe-map-path" d="M170,70 C330,70 350,150 400,150"></path>
+        <path id="pathGds" class="hbe-map-path" d="M170,230 C330,230 350,150 400,150"></path>
+        <path id="pathMid" class="hbe-map-path" d="M600,150 C650,150 670,70 830,70"></path>
+        <path id="pathBack" class="hbe-map-path" d="M600,150 C650,150 670,230 830,230"></path>
+        <circle id="dotObt" class="hbe-map-dot" r="4"></circle>
+        <circle id="dotGds" class="hbe-map-dot" r="4"></circle>
+        <circle id="dotMid" class="hbe-map-dot" r="4"></circle>
+        <circle id="dotBack" class="hbe-map-dot" r="4"></circle>
+      </svg>
+
+      <div class="hbe-map-node hbe-map-node--input" id="nodeObt" style="top:23.3%">
+        <span class="hbe-map-node-label">OBT</span>
+      </div>
+      <div class="hbe-map-node hbe-map-node--input" id="nodeGds" style="top:76.7%">
+        <span class="hbe-map-node-label">GDS</span>
+      </div>
+
+      <div class="hbe-map-node hbe-map-node--center" id="nodeCenter">
+        <span class="hbe-map-node-label">Hotel Booking Engine</span>
+        <span class="hbe-map-node-tag">Processing</span>
+      </div>
+
+      <div class="hbe-map-node hbe-map-node--output" id="nodeMid" style="top:23.3%">
+        <span class="hbe-map-node-label">Mid Office Automation</span>
+      </div>
+      <div class="hbe-map-node hbe-map-node--output" id="nodeBack" style="top:76.7%">
+        <span class="hbe-map-node-label">Back Office Automation</span>
+      </div>
+    </div>
+
+    <div class="hbe-map-fallback">
+      <div class="hbe-map-fallback-row">
+        <span class="hbe-map-node-label">OBT</span>
+        <span class="hbe-map-node-label">GDS</span>
+      </div>
+      <span class="hbe-map-fallback-arrow">↓</span>
+      <span class="hbe-map-node-label" style="border-color: var(--accent);">Hotel Booking Engine</span>
+      <span class="hbe-map-fallback-arrow">↓</span>
+      <div class="hbe-map-fallback-row">
+        <span class="hbe-map-node-label">Mid Office Automation</span>
+        <span class="hbe-map-node-label">Back Office Automation</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="hbe-testimonial" id="testimonial">
+  <div class="wrap">
+    <div class="hbe-testimonial-head">
+      <p class="hbe-testimonial-eyebrow">Customer Stories</p>
+      <h2 class="hbe-testimonial-title">What Travel Management Companies Say</h2>
+    </div>
+
+    <div class="hbe-testimonial-inner">
+      <div class="hbe-testimonial-mark"></div>
+      <div class="hbe-testimonial-body">
+        <svg class="hbe-testimonial-quote-icon" width="30" height="22" viewBox="0 0 30 22" fill="none">
+          <path d="M0 22V13.2C0 8.8 1.1 5.4 3.3 3 5.5 0.6 8.3 -0.4 11.7 0V4.6C9.9 4.4 8.4 4.9 7.2 6.1 6 7.3 5.3 8.9 5.1 11H11.7V22H0ZM17.9 22V13.2C17.9 8.8 19 5.4 21.2 3 23.4 0.6 26.2 -0.4 29.6 0V4.6C27.8 4.4 26.3 4.9 25.1 6.1 23.9 7.3 23.2 8.9 23 11H29.6V22H17.9Z" fill="currentColor"/>
+        </svg>
+
+        <p class="hbe-testimonial-quote">"We considered building our own corporate travel platform and decided against it. Vantis lets us offer modern booking technology under our own brand, without becoming a technology company ourselves."</p>
+
+        <div class="hbe-testimonial-attribution">
+          <div class="hbe-testimonial-avatar">B</div>
+          <p class="hbe-testimonial-attribution-text">
+            <strong>Bhagirath</strong>
+            Uniglobe Global Sri Sai Travels
+          </p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="hbe-crosslinks" id="more-from-this">
+  <div class="wrap">
+    <div class="hbe-crosslinks-head">
+      <p class="hbe-crosslinks-eyebrow">Explore the Platform</p>
+      <h2>More From Your Corporate Travel Management Software</h2>
+    </div>
+
+    <div class="hbe-crosslinks-grid">
+      <a href="flight-booking-engine.html" class="hbe-crosslink">
+        <span class="hbe-crosslink-icon">
+          <svg width="17" height="17" viewBox="0 0 24 24" fill="none"><path d="M3.5 15.5L20.5 8.5c1-.4 1.7.7 1 1.4l-3.6 3.6-.4 5.5-2.1-2.9-4.6 2 1.3-4.8-6.4-2.1c-.9-.3-.9-1.4-.2-1.7Z" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/></svg>
+        </span>
+        <span class="hbe-crosslink-title">
+          Flight Booking Engine
+          <svg width="14" height="14" viewBox="0 0 16 16" fill="none"><path d="M3.5 8H12.5M12.5 8L8.5 4M12.5 8L8.5 12" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </span>
+        <p>Same policy logic, applied to flights.</p>
+      </a>
+      <a href="mid-office-automation.html" class="hbe-crosslink">
+        <span class="hbe-crosslink-icon">
+          <svg width="17" height="17" viewBox="0 0 24 24" fill="none"><path d="M4 6h16M4 12h10M4 18h13" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/><circle cx="20" cy="18" r="1.6" fill="currentColor"/></svg>
+        </span>
+        <span class="hbe-crosslink-title">
+          Mid Office Automation
+          <svg width="14" height="14" viewBox="0 0 16 16" fill="none"><path d="M3.5 8H12.5M12.5 8L8.5 4M12.5 8L8.5 12" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </span>
+        <p>What happens the moment after a booking is made.</p>
+      </a>
+      <a href="back-office-automation.html" class="hbe-crosslink">
+        <span class="hbe-crosslink-icon">
+          <svg width="17" height="17" viewBox="0 0 24 24" fill="none"><rect x="4" y="4" width="16" height="16" rx="1.5" stroke="currentColor" stroke-width="1.6"/><path d="M8 9h8M8 13h5M8 17h8" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg>
+        </span>
+        <span class="hbe-crosslink-title">
+          Back Office Automation
+          <svg width="14" height="14" viewBox="0 0 16 16" fill="none"><path d="M3.5 8H12.5M12.5 8L8.5 4M12.5 8L8.5 12" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </span>
+        <p>Invoicing and reconciliation, handled automatically.</p>
+      </a>
+      <a href="ai-agents.html" class="hbe-crosslink">
+        <span class="hbe-crosslink-icon">
+          <svg width="17" height="17" viewBox="0 0 24 24" fill="none"><circle cx="12" cy="8" r="3.2" stroke="currentColor" stroke-width="1.6"/><path d="M5 20c0-3.6 3.1-6 7-6s7 2.4 7 6" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg>
+        </span>
+        <span class="hbe-crosslink-title">
+          AI Agents
+          <svg width="14" height="14" viewBox="0 0 16 16" fill="none"><path d="M3.5 8H12.5M12.5 8L8.5 4M12.5 8L8.5 12" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </span>
+        <p>The layer that runs all of this on its own.</p>
+      </a>
+    </div>
+  </div>
+</section>
+
+<section class="hbe-faq" id="faq">
+  <div class="wrap">
+    <div class="hbe-faq-head">
+      <p class="hbe-faq-eyebrow">Common Questions</p>
+      <h2>Questions TMC Owners Actually Ask</h2>
+    </div>
+
+    <div class="hbe-faq-list">
+      <div class="hbe-faq-item">
+        <button class="hbe-faq-question" aria-expanded="false">
+          Do we lose our brand or our client relationship?
+          <span class="hbe-faq-icon"></span>
+        </button>
+        <div class="hbe-faq-answer">
+          <p>No. The platform carries your name, and you keep the commercial relationship. We don't approach your clients directly, and we'll put that in writing.</p>
+        </div>
+      </div>
+
+      <div class="hbe-faq-item">
+        <button class="hbe-faq-question" aria-expanded="false">
+          Where does the hotel inventory come from?
+          <span class="hbe-faq-icon"></span>
+        </button>
+        <div class="hbe-faq-answer">
+          <p>From proven, licensed hotel infrastructure already used widely across the industry. We didn't rebuild this from zero, so you get depth of inventory from day one instead of waiting on us to build it.</p>
+        </div>
+      </div>
+
+      <div class="hbe-faq-item">
+        <button class="hbe-faq-question" aria-expanded="false">
+          Can we keep our existing negotiated rates and contracts?
+          <span class="hbe-faq-icon"></span>
+        </button>
+        <div class="hbe-faq-answer">
+          <p>Yes. Your existing rates load into the system rather than getting replaced by ours.</p>
+        </div>
+      </div>
+
+      <div class="hbe-faq-item">
+        <button class="hbe-faq-question" aria-expanded="false">
+          How long does it take to go live?
+          <span class="hbe-faq-icon"></span>
+        </button>
+        <div class="hbe-faq-answer">
+          <p>Weeks, not months, since this engine is already live and running.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="hbe-demo-cta" id="demo">
+  <div class="wrap">
+    <div class="hbe-demo-inner">
+      <div class="hbe-demo-copy">
+        <p class="hbe-demo-eyebrow">Book a Demo</p>
+        <h2 class="hbe-demo-title">See it on your own booking flow.</h2>
+        <p class="hbe-demo-sub">Fifteen minutes. No commitment.</p>
+
+        <div class="hbe-demo-points">
+          <div class="hbe-demo-point">
+            <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M3 8.5l3.5 3.5L13 4.5" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            We'll walk through your actual policies and fare setup
+          </div>
+          <div class="hbe-demo-point">
+            <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M3 8.5l3.5 3.5L13 4.5" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            No sales deck, just the product
+          </div>
+          <div class="hbe-demo-point">
+            <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M3 8.5l3.5 3.5L13 4.5" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            No commitment required
+          </div>
+        </div>
+      </div>
+
+      <form class="hbe-demo-form-card" id="hbeDemoForm">
+        <div class="hbe-demo-form-row">
+          <div class="hbe-demo-field">
+            <label for="hbeDemoName">Name</label>
+            <input type="text" id="hbeDemoName" name="name" placeholder="Your full name" required>
+          </div>
+          <div class="hbe-demo-field">
+            <label for="hbeDemoEmail">Work Email</label>
+            <input type="email" id="hbeDemoEmail" name="email" placeholder="you@company.com" required>
+          </div>
+        </div>
+
+        <div class="hbe-demo-form-row">
+          <div class="hbe-demo-field">
+            <label for="hbeDemoCompany">Company</label>
+            <input type="text" id="hbeDemoCompany" name="company" placeholder="Your company name" required>
+          </div>
+          <div class="hbe-demo-field">
+            <label for="hbeDemoPhone">Phone</label>
+            <input type="tel" id="hbeDemoPhone" name="phone" placeholder="+1 (555) 000-0000" required>
+          </div>
+        </div>
+
+        <button type="submit" class="btn-primary hbe-demo-submit">
+          Book a Demo
+          <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+            <path d="M3.5 8H12.5M12.5 8L8.5 4M12.5 8L8.5 12" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+        </button>
+
+        <p class="hbe-demo-form-note">We'll reply within one business day.</p>
+      </form>
+    </div>
+  </div>
+</section>
+
+<footer id="site-footer">
+  <div class="wrap">
+    <div class="hbe-footer-inner">
+      <div class="hbe-footer-brand">
+        <img src="assets/logo-white.png" alt="VantisCorp logo">
+        <p class="hbe-footer-tagline">The corporate travel management software your TMC runs on.</p>
+      </div>
+
+      <div class="hbe-footer-col">
+        <p class="hbe-footer-col-title">Product</p>
+        <nav class="hbe-footer-links">
+          <a href="index.html#capabilities">Capabilities</a>
+          <a href="index.html#how-it-works">How It Works</a>
+          <a href="index.html#integrations">Integrations</a>
+          <a href="index.html#insights">Insights</a>
+        </nav>
+      </div>
+
+      <div class="hbe-footer-col">
+        <p class="hbe-footer-col-title">Company</p>
+        <nav class="hbe-footer-links">
+          <a href="#demo">Book a Demo</a>
+          <a href="leadership.html">Leadership</a>
+          <a href="#">Contact</a>
+        </nav>
+      </div>
+    </div>
+
+    <div class="hbe-footer-bottom">
+      <p class="hbe-footer-copyright">© 2026 VantisCorp. All rights reserved.</p>
+      <nav class="hbe-footer-legal">
+        <a href="#">Privacy</a>
+        <a href="#">Terms</a>
+        <a href="#">DPA</a>
+      </nav>
+    </div>
+  </div>
+</footer>
+
+<script type="module">
+  import Lenis from "https://esm.sh/lenis";
+  import { animate, inView, stagger } from "https://esm.sh/motion";
+  import { gsap } from "https://esm.sh/gsap";
+  import { ScrollTrigger } from "https://esm.sh/gsap/ScrollTrigger";
+
+  const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  if (!prefersReducedMotion) {
+    // Smooth scroll
+    const lenis = new Lenis();
+    function raf(time) {
+      lenis.raf(time);
+      requestAnimationFrame(raf);
+    }
+    requestAnimationFrame(raf);
+
+    document.querySelectorAll('.hbe-hero .fade-up').forEach(el => {
+      animate(el, { opacity: 1, y: 0 }, { duration: 0.6, delay: parseFloat(el.dataset.delay || 0), easing: 'ease-out' });
+    });
+    // Visual panel: opacity-only entrance so its positioning transform
+    // (off-edge offset + tilt) is left untouched.
+    animate('.hbe-visual', { opacity: 1 }, { duration: 0.8, delay: 0.55, easing: 'ease-out' });
+
+    // Section 2: fade + slide up on scroll, matching the homepage's problem section
+    inView('.hbe-problem', () => {
+      animate('.hbe-problem-copy', { opacity: 1, y: 0 }, { duration: 0.6, easing: 'ease-out' });
+    }, { amount: 0.3 });
+
+    // Video block: same reveal as the homepage's solution-video
+    inView('.hbe-solution-video', () => {
+      animate('.hbe-video-title', { opacity: 1, y: 0 }, { duration: 0.5, easing: 'ease-out' });
+      animate('.hbe-video-frame', { opacity: 1, scale: 1 }, { duration: 0.7, delay: 0.15, easing: 'ease-out' });
+    }, { amount: 0.3 });
+
+    // Section 3: heading fades up once; each alternating row's text and
+    // visual animate in independently, slightly offset, as that row scrolls
+    // into view — not all four at once.
+    inView('.hbe-features-head', () => {
+      animate('.hbe-features-eyebrow', { opacity: 1, y: 0 }, { duration: 0.45, easing: 'ease-out' });
+      animate('.hbe-features-head h2', { opacity: 1, y: 0 }, { duration: 0.55, delay: 0.1, easing: 'ease-out' });
+    }, { amount: 0.5 });
+
+    document.querySelectorAll('.hbe-feature-row').forEach(row => {
+      inView(row, () => {
+        const text = row.querySelector('.hbe-feature-text');
+        const visual = row.querySelector('.hbe-feature-visual');
+        animate(text, { opacity: 1, x: 0 }, { duration: 0.6, easing: 'ease-out' });
+        animate(visual, { opacity: 1, scale: 1 }, { duration: 0.7, delay: 0.18, easing: 'ease-out' });
+      }, { amount: 0.35 });
+    });
+
+    // Section 4: heading fade-up on scroll-in
+    inView('.hbe-map-head', () => {
+      animate('.hbe-map-head', { opacity: 1, y: 0 }, { duration: 0.6, easing: 'ease-out' });
+    }, { amount: 0.4 });
+
+    // Section 4: system map — plays once as a smooth, time-based GSAP tween
+    // when the diagram scrolls into view (not scrubbed to scroll position,
+    // so it always runs at the same even pace regardless of scroll speed),
+    // animating the same left-to-right flow: OBT/GDS -> Hotel Booking Engine
+    // -> Mid/Back Office.
+    gsap.registerPlugin(ScrollTrigger);
+    // Lenis intercepts native scroll, so ScrollTrigger still needs this sync
+    // to know when the diagram enters view — the animation itself below is
+    // a plain time-based tween, not scrubbed to scroll position.
+    lenis.on('scroll', ScrollTrigger.update);
+
+    const mapDiagram = document.querySelector('.hbe-map-diagram');
+    if (mapDiagram) {
+      const pathObt = document.getElementById('pathObt');
+      const pathGds = document.getElementById('pathGds');
+      const pathMid = document.getElementById('pathMid');
+      const pathBack = document.getElementById('pathBack');
+      const dotObt = document.getElementById('dotObt');
+      const dotGds = document.getElementById('dotGds');
+      const dotMid = document.getElementById('dotMid');
+      const dotBack = document.getElementById('dotBack');
+
+      const nodeObt = document.getElementById('nodeObt');
+      const nodeGds = document.getElementById('nodeGds');
+      const nodeCenter = document.getElementById('nodeCenter');
+      const nodeMid = document.getElementById('nodeMid');
+      const nodeBack = document.getElementById('nodeBack');
+
+      const inputPaths = [pathObt, pathGds];
+      const inputDots = [dotObt, dotGds];
+      const inputLens = inputPaths.map(p => p.getTotalLength());
+      inputPaths.forEach((p, i) => {
+        p.style.strokeDasharray = inputLens[i];
+        p.style.strokeDashoffset = inputLens[i];
+      });
+
+      const midLen = pathMid.getTotalLength();
+      pathMid.style.strokeDasharray = midLen;
+      pathMid.style.strokeDashoffset = midLen;
+
+      const backLen = pathBack.getTotalLength();
+      pathBack.style.strokeDasharray = backLen;
+      pathBack.style.strokeDashoffset = backLen;
+
+      const muted = [198, 204, 212];
+      const accent = [23, 204, 144];
+      const inkSoft = [75, 85, 101];
+
+      function lerp(a, b, t) { return a + (b - a) * t; }
+      function lerpRGB(c1, c2, t) {
+        return `rgb(${Math.round(lerp(c1[0], c2[0], t))}, ${Math.round(lerp(c1[1], c2[1], t))}, ${Math.round(lerp(c1[2], c2[2], t))})`;
+      }
+      function clamp01(v) { return Math.max(0, Math.min(1, v)); }
+
+      function setPathProgress(path, dot, len, t) {
+        path.style.strokeDashoffset = len * (1 - t);
+        path.style.stroke = t > 0.05 ? 'var(--accent)' : 'var(--line)';
+        if (t > 0.03 && t < 0.97) {
+          const pt = path.getPointAtLength(len * t);
+          dot.setAttribute('cx', pt.x);
+          dot.setAttribute('cy', pt.y);
+          dot.style.opacity = 1;
+        } else {
+          dot.style.opacity = 0;
+        }
+      }
+
+      function setNodeActive(node, t) {
+        const bg = lerpRGB([255, 255, 255], [236, 250, 244], t);
+        const border = lerpRGB(muted, accent, t);
+        const label = node.querySelector('.hbe-map-node-label');
+        node.style.background = bg;
+        node.style.borderColor = border;
+        if (label) label.style.color = lerpRGB(inkSoft, [16, 88, 62], t);
+      }
+
+      function renderFlow(progress) {
+        // Input nodes: active as soon as the sequence engages
+        const inputT = clamp01(progress / 0.35);
+        setPathProgress(pathObt, dotObt, inputLens[0], inputT);
+        setPathProgress(pathGds, dotGds, inputLens[1], inputT);
+        setNodeActive(nodeObt, clamp01(progress / 0.12));
+        setNodeActive(nodeGds, clamp01(progress / 0.12));
+
+        // Center node: activates as the input lines finish arriving
+        setNodeActive(nodeCenter, clamp01((progress - 0.30) / 0.12));
+
+        // Mid Office: draws and lights up first on the output side
+        const midT = clamp01((progress - 0.42) / 0.26);
+        setPathProgress(pathMid, dotMid, midLen, midT);
+        setNodeActive(nodeMid, clamp01((progress - 0.60) / 0.10));
+
+        // Back Office: follows shortly after, completing the flow
+        const backT = clamp01((progress - 0.68) / 0.27);
+        setPathProgress(pathBack, dotBack, backLen, backT);
+        setNodeActive(nodeBack, clamp01((progress - 0.90) / 0.08));
+      }
+
+      renderFlow(0);
+
+      const flowTween = gsap.to({ p: 0 }, {
+        p: 1,
+        duration: 4.5,
+        ease: 'power1.inOut',
+        paused: true,
+        onUpdate() {
+          renderFlow(this.targets()[0].p);
+        }
+      });
+
+      ScrollTrigger.create({
+        trigger: '.hbe-map-diagram',
+        start: 'top 75%',
+        once: true,
+        onEnter() { flowTween.play(); }
+      });
+    }
+
+    // Section 5: testimonial reveal — heading, then accent mark, then quote + attribution
+    inView('.hbe-testimonial', () => {
+      animate('.hbe-testimonial-eyebrow', { opacity: 1, y: 0 }, { duration: 0.45, easing: 'ease-out' });
+      animate('.hbe-testimonial-title', { opacity: 1, y: 0 }, { duration: 0.5, delay: 0.1, easing: 'ease-out' });
+      animate('.hbe-testimonial-mark', { opacity: 1, scaleY: 1 }, { duration: 0.5, delay: 0.2, easing: 'ease-out' });
+      animate('.hbe-testimonial-quote-icon', { opacity: 1, y: 0 }, { duration: 0.4, delay: 0.3, easing: 'ease-out' });
+      animate('.hbe-testimonial-quote', { opacity: 1, y: 0 }, { duration: 0.6, delay: 0.4, easing: 'ease-out' });
+      animate('.hbe-testimonial-attribution', { opacity: 1, y: 0 }, { duration: 0.5, delay: 0.65, easing: 'ease-out' });
+    }, { amount: 0.4 });
+
+    // Section 7: cross-links — heading then the 4 links stagger in
+    inView('.hbe-crosslinks', () => {
+      animate('.hbe-crosslinks-head', { opacity: 1, y: 0 }, { duration: 0.5, easing: 'ease-out' });
+      animate('.hbe-crosslink', { opacity: 1, y: 0 }, { duration: 0.45, delay: stagger(0.08, { start: 0.15 }), easing: 'ease-out' });
+    }, { amount: 0.3 });
+
+    // Section 8: FAQ — heading then items stagger in on scroll
+    inView('.hbe-faq', () => {
+      animate('.hbe-faq-head', { opacity: 1, y: 0 }, { duration: 0.5, easing: 'ease-out' });
+      animate('.hbe-faq-item', { opacity: 1, y: 0 }, { duration: 0.45, delay: stagger(0.08, { start: 0.15 }), easing: 'ease-out' });
+    }, { amount: 0.2 });
+
+    // FAQ accordion: expand/collapse via Motion, animating actual height
+    // (measured from scrollHeight) rather than a instant toggle; only one
+    // item stays open at a time.
+    document.querySelectorAll('.hbe-faq-item').forEach(item => {
+      const question = item.querySelector('.hbe-faq-question');
+      const answer = item.querySelector('.hbe-faq-answer');
+
+      question.addEventListener('click', () => {
+        const isOpen = item.classList.contains('is-open');
+
+        document.querySelectorAll('.hbe-faq-item.is-open').forEach(openItem => {
+          if (openItem !== item) {
+            openItem.classList.remove('is-open');
+            openItem.querySelector('.hbe-faq-question').setAttribute('aria-expanded', 'false');
+            animate(openItem.querySelector('.hbe-faq-answer'), { height: 0 }, { duration: 0.3, easing: 'ease-out' });
+          }
+        });
+
+        if (isOpen) {
+          item.classList.remove('is-open');
+          question.setAttribute('aria-expanded', 'false');
+          animate(answer, { height: 0 }, { duration: 0.3, easing: 'ease-out' });
+        } else {
+          item.classList.add('is-open');
+          question.setAttribute('aria-expanded', 'true');
+          animate(answer, { height: answer.scrollHeight }, { duration: 0.35, easing: 'ease-out' })
+            .then(() => { if (item.classList.contains('is-open')) answer.style.height = 'auto'; });
+        }
+      });
+    });
+
+    // Section 9: demo booking form reveal
+    inView('.hbe-demo-cta', () => {
+      animate('.hbe-demo-inner', { opacity: 1, y: 0 }, { duration: 0.6, easing: 'ease-out' });
+    }, { amount: 0.2 });
+
+    // Footer: simple fade-in
+    inView('footer', () => {
+      animate('.hbe-footer-inner', { opacity: 1, y: 0 }, { duration: 0.5, easing: 'ease-out' });
+    }, { amount: 0.15 });
+  } else {
+    document.querySelectorAll('.hbe-hero .fade-up').forEach(el => {
+      el.style.opacity = 1;
+      el.style.transform = 'none';
+    });
+    document.querySelector('.hbe-visual').style.opacity = 1;
+    document.querySelector('.hbe-problem-copy').style.opacity = 1;
+    document.querySelector('.hbe-problem-copy').style.transform = 'none';
+    document.querySelectorAll('.hbe-video-title, .hbe-video-frame, .hbe-features-eyebrow, .hbe-features-head h2, .hbe-feature-text, .hbe-feature-visual, .hbe-map-head').forEach(el => {
+      el.style.opacity = 1;
+      el.style.transform = 'none';
+    });
+    document.querySelectorAll('.hbe-map-path').forEach(p => { p.style.stroke = 'var(--accent)'; });
+    document.querySelectorAll('.hbe-map-node').forEach(n => {
+      n.style.background = '#ECFAF4';
+      n.style.borderColor = 'var(--accent)';
+    });
+    document.querySelectorAll('.hbe-testimonial-eyebrow, .hbe-testimonial-title, .hbe-testimonial-mark, .hbe-testimonial-quote-icon, .hbe-testimonial-quote, .hbe-testimonial-attribution, .hbe-crosslinks-head, .hbe-crosslink, .hbe-faq-head, .hbe-faq-item').forEach(el => {
+      el.style.opacity = 1;
+      el.style.transform = 'none';
+    });
+
+    // FAQ accordion still works without Motion's animated height tween
+    document.querySelectorAll('.hbe-faq-item').forEach(item => {
+      const question = item.querySelector('.hbe-faq-question');
+      const answer = item.querySelector('.hbe-faq-answer');
+      question.addEventListener('click', () => {
+        const isOpen = item.classList.contains('is-open');
+        document.querySelectorAll('.hbe-faq-item.is-open').forEach(openItem => {
+          if (openItem !== item) {
+            openItem.classList.remove('is-open');
+            openItem.querySelector('.hbe-faq-question').setAttribute('aria-expanded', 'false');
+            openItem.querySelector('.hbe-faq-answer').style.height = '0px';
+          }
+        });
+        item.classList.toggle('is-open', !isOpen);
+        question.setAttribute('aria-expanded', String(!isOpen));
+        answer.style.height = isOpen ? '0px' : answer.scrollHeight + 'px';
+      });
+    });
+    document.querySelector('.hbe-demo-inner').style.opacity = 1;
+    document.querySelector('.hbe-demo-inner').style.transform = 'none';
+    document.querySelector('.hbe-footer-inner').style.opacity = 1;
+    document.querySelector('.hbe-footer-inner').style.transform = 'none';
+  }
+
+  // Demo form: no backend yet — prevent reload, show a confirmation in place
+  const hbeDemoForm = document.getElementById('hbeDemoForm');
+  if (hbeDemoForm) {
+    hbeDemoForm.addEventListener('submit', (e) => {
+      e.preventDefault();
+      hbeDemoForm.innerHTML = '<p style="font-family:Space Grotesk, sans-serif; font-size:19px; font-weight:600;">Thanks — we\'ll be in touch shortly.</p><p style="margin-top:8px; font-size:14px; color:#4B5565;">Expect an email within one business day to schedule your walkthrough.</p>';
+    });
+  }
+</script>
+
+</body>
+</html>
